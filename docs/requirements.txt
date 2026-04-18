@@ -1,0 +1,9 @@
+sphinx>=7,<9
+furo>=2024.8
+myst-parser>=3
+sphinx-copybutton>=0.5
+sphinx-design>=0.6
+linkify-it-py>=2
+# Runtime deps (required for autodoc to import the package)
+pydantic>=2.7,<3
+requests>=2.31,<3

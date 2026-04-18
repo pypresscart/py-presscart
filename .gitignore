@@ -34,3 +34,7 @@ CLAUDE.md
 
 # API docs snapshot (local reference only)
 api-docs/
+
+# Sphinx build artifacts
+docs/_build/
+docs/_autosummary/

@@ -8,6 +8,15 @@
   <a href="https://mypy-lang.org/"><img alt="Checked with mypy" src="https://www.mypy-lang.org/static/mypy_badge.svg"></a>
   <a href="https://docs.pydantic.dev/"><img alt="Types - Pydantic" src="https://img.shields.io/badge/types-pydantic-E92063.svg"></a>
   <a href="https://pre-commit.com/"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit"></a>
+  <a href="https://annjawn.github.io/py-presscart/"><img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/annjawn/py-presscart/docs.yml?label=docs"></a>
+</p>
+
+<p align="center">
+  <a href="https://annjawn.github.io/py-presscart/">📚 Documentation</a>
+  ·
+  <a href="https://pypi.org/project/pypresscart/">PyPI</a>
+  ·
+  <a href="https://github.com/annjawn/py-presscart/issues">Issues</a>
 </p>
 
 > ⚠️ **Unofficial library.** This project is not affiliated with, endorsed by, or supported by Presscart. It's a community-maintained Python client for the [Presscart API](https://docs.presscart.com).
@@ -154,6 +163,21 @@ is covered by a method on one of the resource services:
 | `client.folders` | `list`, `create`, `rename`, `delete` |
 
 Each method's docstring includes the required token scope.
+
+## Documentation
+
+Full documentation lives at **<https://annjawn.github.io/py-presscart/>** — Sphinx site built from `docs/` and deployed automatically by [`.github/workflows/docs.yml`](.github/workflows/docs.yml) on every push to `main`.
+
+Build locally:
+
+```bash
+uv sync --group docs
+uv run sphinx-build -b html -n -W --keep-going docs docs/_build/html
+open docs/_build/html/index.html
+
+# Or with live reload:
+uv run sphinx-autobuild docs docs/_build/html --watch src/pypresscart
+```
 
 ## Development
 
