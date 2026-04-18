@@ -4,6 +4,16 @@ All notable changes to `pypresscart` are recorded here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.2] — 2026-04-18
+
+### Fixed
+- `serialize_filters` now emits list-valued filters in the indexed-bracket
+  form (`filters[key][0]=v1&filters[key][1]=v2`) that the Presscart API
+  actually parses. The previous bare-bracket form (`filters[key][]=v1`) was
+  silently ignored by the server, causing any query using `disclaimer_ids`,
+  `placement_types`, `channel_types`, `tags`, or `product_ids` to return the
+  full unfiltered result set instead of the expected subset.
+
 ## [0.1.1] — 2026-04-18
 
 Housekeeping release. No runtime behavior changes.
@@ -31,6 +41,7 @@ Initial public release.
 - Runtime: `pydantic>=2.7,<3`, `requests>=2.31,<3`.
 - Python 3.10+.
 
-[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.2
 [0.1.1]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.1
 [0.1.0]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.0
