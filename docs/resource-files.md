@@ -100,6 +100,15 @@ for f in resp.files:
 
 `pypresscart` opens any file paths you pass and closes them automatically.
 
+:::{note}
+**MIME types:** the server validates the multipart Content-Type against an
+allow-list (`image/jpeg`, `image/png`, `application/pdf`, …). When you pass
+a path or file handle, the library guesses the type from the filename
+extension via :py:func:`mimetypes.guess_type`; unknown extensions fall back
+to `application/octet-stream`. If you're uploading from a buffer with an
+unusual name, pass a `(filename, fileobj, content_type)` tuple explicitly.
+:::
+
 ---
 
 ### `download`
@@ -146,6 +155,25 @@ client.files.move(
 )
 # MoveFilesResponse(moved_count=2)
 ```
+
+:::{warning}
+**Moving a file to root (out of any folder) requires a dict, not the Pydantic model.**
+
+The server requires `folder_id` to be present in the body as an explicit
+`null` to mean "move to root". Pydantic models are serialized with
+`exclude_none=True`, which *omits* the key entirely — the API then returns
+400. Use a dict for this one call:
+
+```python
+# ✅ explicit null — moves to root
+client.files.move({"file_ids": ["f_1"], "folder_id": None})
+
+# ❌ field gets dropped, server returns 400
+client.files.move(MoveFilesRequest(file_ids=["f_1"], folder_id=None))
+```
+
+See [Dual-Mode I/O](dual-mode.md#fields-set-to-none-are-omitted-not-sent-as-null).
+:::
 
 ---
 

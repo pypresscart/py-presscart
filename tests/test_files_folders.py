@@ -47,6 +47,25 @@ def test_upload_files_from_fileobj(mocked: responses.RequestsMock, client: Press
     assert ctype.startswith("multipart/form-data")
 
 
+def test_upload_sends_content_type_from_filename(
+    mocked: responses.RequestsMock, client: PresscartClient, tmp_path
+) -> None:
+    """Server-side validation checks the multipart Content-Type, so we need
+    to send one explicitly — not let requests default to text/plain."""
+    img = tmp_path / "avatar.jpg"
+    img.write_bytes(b"\xff\xd8\xff")  # JPEG magic bytes (content doesn't matter)
+    mocked.add(
+        responses.POST,
+        f"{BASE_URL}/files/upload",
+        json={"files": [{"id": "f_1", "name": "avatar.jpg"}]},
+    )
+    client.files.upload(img)
+    body = mocked.calls[0].request.body
+    body_str = body.decode("latin-1") if isinstance(body, bytes) else str(body)
+    assert "Content-Type: image/jpeg" in body_str
+    assert "Content-Type: text/plain" not in body_str
+
+
 def test_move_files(mocked: responses.RequestsMock, client: PresscartClient) -> None:
     mocked.add(responses.POST, f"{BASE_URL}/files/move", json={"moved_count": 2})
     resp = client.files.move(MoveFilesRequest(file_ids=["a", "b"], folder_id="fld_1"))

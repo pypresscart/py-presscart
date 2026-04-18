@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import mimetypes
 from collections.abc import Sequence
 from pathlib import Path
 from typing import IO, Any
@@ -120,6 +121,19 @@ def _prepare_upload(
         path = Path(item)
         fh = path.open("rb")
         opened.append(fh)
-        return (path.name, fh)
+        return (path.name, fh, _guess_mime(path.name))
     name = getattr(item, "name", "upload")
-    return (Path(name).name, item)
+    filename = Path(name).name
+    return (filename, item, _guess_mime(filename))
+
+
+def _guess_mime(filename: str) -> str:
+    """Best-effort MIME guess. Falls back to ``application/octet-stream``.
+
+    Presscart's upload endpoint validates the multipart Content-Type against
+    an allow-list (image/jpeg, image/png, application/pdf, …). Sending no
+    explicit type causes ``requests`` to default to ``text/plain`` which the
+    server rejects.
+    """
+    guessed, _ = mimetypes.guess_type(filename)
+    return guessed or "application/octet-stream"
