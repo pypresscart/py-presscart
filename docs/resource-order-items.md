@@ -1,6 +1,6 @@
-# Resource: Order Items
+# Order Items
 
-Team-wide order-item reporting. For per-profile order items, see [Resource: Profiles](resource-profiles.md).
+Team-wide order-item reporting. For per-profile order items, see [Profiles](resource-profiles.md).
 
 ```python
 client.order_items  # OrderItemsResource

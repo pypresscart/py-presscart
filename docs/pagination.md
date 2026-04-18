@@ -28,7 +28,7 @@ Every paginated endpoint in `pypresscart` accepts at least:
 | `sort_by` | varies | Field name (see endpoint docs) |
 | `order_by` | `"desc"` | `"asc"` or `"desc"` |
 
-Many endpoints also accept a `filters=` dict — see [Resource: Outlets](resource-outlets.md) for a filter-rich example.
+Many endpoints also accept a `filters=` dict — see [Outlets](resource-outlets.md) for a filter-rich example.
 
 ## Iterating all pages
 

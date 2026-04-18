@@ -1,4 +1,4 @@
-# Resource: Profiles
+# Profiles
 
 A **profile** is the brand/entity being promoted. Orders, campaigns, and articles all belong to a profile.
 

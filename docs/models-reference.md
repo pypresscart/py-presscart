@@ -74,7 +74,7 @@ All enums accept either the enum value or a raw string — models declare the ty
 
 ### `TokenInfo`
 
-Response from [Resource: Auth](resource-auth.md)`.whoami()`.
+Response from [Auth](resource-auth.md)`.whoami()`.
 
 | Field | Type |
 |---|---|
@@ -124,7 +124,7 @@ class ProductCategoryCount:
 ## Orders
 
 ### `Order`
-Full order; includes nested `line_items`, `team`, and payment metadata. See [Resource: Orders](resource-orders.md).
+Full order; includes nested `line_items`, `team`, and payment metadata. See [Orders](resource-orders.md).
 
 ### `LineItem`
 A single line on an order.
@@ -177,7 +177,7 @@ Brand/entity the team promotes.
 Full campaign, including optional nested `profile`, `questionnaire`, `articles`.
 
 ### `CampaignCreateRequest`
-See [Resource: Campaigns](resource-campaigns.md) — all fields required at the schema level, though many may be `None`.
+See [Campaigns](resource-campaigns.md) — all fields required at the schema level, though many may be `None`.
 
 ### `CampaignUpdateRequest`
 All fields optional.

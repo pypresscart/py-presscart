@@ -1,4 +1,4 @@
-# Resource: Articles
+# Articles
 
 Individual articles (the content piece going to an outlet) within a campaign.
 
@@ -128,4 +128,4 @@ client.articles.approve_draft(
 
 ### List all articles for a campaign
 
-Use `client.campaigns.list_articles(campaign_id)` — see [Resource: Campaigns](resource-campaigns.md).
+Use `client.campaigns.list_articles(campaign_id)` — see [Campaigns](resource-campaigns.md).

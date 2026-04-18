@@ -1,4 +1,4 @@
-# Resource: Orders
+# Orders
 
 List, read, and create checkouts.
 

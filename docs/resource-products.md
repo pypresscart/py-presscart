@@ -1,4 +1,4 @@
-# Resource: Products
+# Products
 
 Individual products (purchasable placements), cross-outlet listings, and category counts.
 

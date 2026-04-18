@@ -1,4 +1,4 @@
-# Resource: Folders
+# Folders
 
 Organize uploaded files into folders.
 

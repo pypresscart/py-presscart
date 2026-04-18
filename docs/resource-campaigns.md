@@ -1,4 +1,4 @@
-# Resource: Campaigns
+# Campaigns
 
 A **campaign** groups related articles and order items under a shared brief and questionnaire.
 

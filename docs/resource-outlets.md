@@ -1,4 +1,4 @@
-# Resource: Outlets
+# Outlets
 
 Browse the marketplace of outlets (publications, newsletters, social channels) and their metadata.
 

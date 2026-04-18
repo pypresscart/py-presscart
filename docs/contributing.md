@@ -54,7 +54,7 @@ When Presscart ships a new endpoint:
 4. Re-export user-facing model types from `src/pypresscart/__init__.py`.
 5. Add tests under `tests/test_<resource>.py`: happy path, dual-mode coverage, one error path if interesting.
 6. Run the full dev loop.
-7. Update the matching docs page (e.g. `docs/Resource-<Resource>.md`) and `docs/Models-Reference.md`.
+7. Update the matching docs page (e.g. `docs/resource-<name>.md`) and `docs/models-reference.md`.
 
 ## Adding a new resource
 

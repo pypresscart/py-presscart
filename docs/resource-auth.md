@@ -1,4 +1,4 @@
-# Resource: Auth
+# Auth
 
 Access token introspection.
 

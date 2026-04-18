@@ -30,7 +30,7 @@ You can override the `User-Agent` via `PresscartClient(..., user_agent="my-app/1
 | `custom` | Only the explicit scopes on the token. Most common. |
 | `read_only` | Can `GET`/`LIST` on its scopes but cannot write. |
 
-`client.auth.whoami()` returns the current token's type in `.token_type`. See [Resource: Auth](resource-auth.md).
+`client.auth.whoami()` returns the current token's type in `.token_type`. See [Auth](resource-auth.md).
 
 ## Scopes
 

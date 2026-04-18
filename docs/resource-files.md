@@ -1,4 +1,4 @@
-# Resource: Files
+# Files
 
 Upload assets (brand guides, writing samples, images) and manage them.
 
