@@ -106,6 +106,9 @@ indent-style = "space"
 testpaths = ["tests"]
 addopts = "-ra --strict-markers --strict-config"
 filterwarnings = ["error"]
+markers = [
+    "integration: hits the live Presscart API. Requires PRESSCART_API_TOKEN; auto-skips otherwise. Run with `pytest -m integration` (or the whole suite; they self-skip).",
+]
 
 [tool.coverage.run]
 source = ["pypresscart"]

@@ -100,16 +100,24 @@ All 55+ unit tests in the repo's `tests/` directory mock the HTTP layer with [`r
 
 ## How this was tested
 
-Each "fully exercised" resource has a matching script under `testing/` in the repo (gitignored because it holds a real API token):
+Each "fully exercised" resource has a matching pytest module under [`tests/integration/`](https://github.com/pypresscart/py-presscart/tree/main/tests/integration):
 
-| Resource | Script |
+| Resource | Module |
 |---|---|
-| Outlets | `testing/test_outlets.py` |
-| Products | `testing/test_products.py` |
-| Orders + Order Items | `testing/test_orders.py` |
-| Profiles | `testing/test_profiles.py` |
-| Campaigns | `testing/test_campaigns.py` |
-| Articles | `testing/test_articles.py` |
-| Files + Folders | `testing/test_files.py`, `testing/test_folders.py` |
+| Auth | `tests/integration/test_auth.py` |
+| Outlets | `tests/integration/test_outlets.py` |
+| Products | `tests/integration/test_products.py` |
+| Orders + Order Items | `tests/integration/test_orders.py` |
+| Profiles | `tests/integration/test_profiles.py` |
+| Campaigns | `tests/integration/test_campaigns.py` |
+| Articles | `tests/integration/test_articles.py` |
+| Files | `tests/integration/test_files.py` |
+| Folders | `tests/integration/test_folders.py` |
 
-Running any of these after `uv pip install dist/pypresscart-*.whl` in an isolated venv hits the real API with the token in `testing/.env.local`.
+Every module is marked `@pytest.mark.integration`. Drop a token into `tests/integration/.env.local` (template: `.env.local.example`) and run them with:
+
+```bash
+uv run pytest -m integration -v -s
+```
+
+Integration tests auto-skip if `PRESSCART_API_TOKEN` is absent, so CI stays green without one.
