@@ -35,5 +35,5 @@ api-docs/
 docs/_build/
 docs/_autosummary/
 
-# Local integration testing (contains real API tokens)
-testing/
+# Integration tests: check in the scripts, not the secret-laden .env file
+tests/integration/.env.local

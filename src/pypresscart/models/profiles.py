@@ -47,9 +47,9 @@ class Profile(PresscartModel):
             ``"{}"`` / ``""``   → ``[]``
             anything else       → left alone (Pydantic will raise)
 
-        This is a server-side bug on Presscart's side (see ``testing/bugs.md``
-        issue #2). Once the API is corrected, this validator becomes a no-op
-        for the JSON path and can be removed.
+        This is a server-side bug on Presscart's side (tracked as issue #2
+        on the repo). Once the API is corrected, this validator becomes a
+        no-op for the JSON path and can be removed.
         """
         if v is None:
             return []
