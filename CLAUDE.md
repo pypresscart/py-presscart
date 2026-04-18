@@ -44,7 +44,7 @@ uv run sphinx-build -b html -n -W --keep-going docs docs/_build/html   # clean b
 uv run sphinx-autobuild docs docs/_build/html --watch src/pypresscart  # live reload
 ```
 
-The docs site is at <https://annjawn.github.io/py-presscart/>, deployed by
+The docs site is at <https://pypresscart.github.io/py-presscart/>, deployed by
 `.github/workflows/docs.yml` on every push to `main`. Source lives in `docs/`
 (Sphinx + MyST + Furo theme, with autosummary-driven API reference).
 

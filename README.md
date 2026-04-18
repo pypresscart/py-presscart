@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/pypresscart/py-presscart/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/pypresscart/py-presscart/ci.yml?branch=main&label=CI"></a>
-  <a href="https://annjawn.github.io/py-presscart/"><img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/pypresscart/py-presscart/docs.yml?branch=main&label=docs"></a>
+  <a href="https://pypresscart.github.io/py-presscart/"><img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/pypresscart/py-presscart/docs.yml?branch=main&label=docs"></a>
   <a href="https://pypi.org/project/pypresscart/"><img alt="PyPI" src="https://img.shields.io/pypi/v/pypresscart.svg"></a>
   <a href="https://pypi.org/project/pypresscart/"><img alt="Python" src="https://img.shields.io/pypi/pyversions/pypresscart.svg"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://annjawn.github.io/py-presscart/">📚 Documentation</a>
+  <a href="https://pypresscart.github.io/py-presscart/">📚 Documentation</a>
   ·
   <a href="https://pypi.org/project/pypresscart/">PyPI</a>
   ·
@@ -167,7 +167,7 @@ Each method's docstring includes the required token scope.
 
 ## Documentation
 
-Full documentation lives at **<https://annjawn.github.io/py-presscart/>** — Sphinx site built from `docs/` and deployed automatically by [`.github/workflows/docs.yml`](.github/workflows/docs.yml) on every push to `main`.
+Full documentation lives at **<https://pypresscart.github.io/py-presscart/>** — Sphinx site built from `docs/` and deployed automatically by [`.github/workflows/docs.yml`](.github/workflows/docs.yml) on every push to `main`.
 
 Build locally:
 

@@ -86,7 +86,7 @@ git tag v<X.Y.Z> && git push --tags
 
 ## Docs
 
-Docs in `docs/` build a Sphinx site deployed to [GitHub Pages](https://annjawn.github.io/py-presscart/) by `.github/workflows/docs.yml`. See `docs/README.md` in the repo for the local authoring workflow.
+Docs in `docs/` build a Sphinx site deployed to [GitHub Pages](https://pypresscart.github.io/py-presscart/) by `.github/workflows/docs.yml`. See `docs/README.md` in the repo for the local authoring workflow.
 
 ## Code of conduct
 

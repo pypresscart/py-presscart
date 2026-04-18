@@ -2,7 +2,7 @@
 
 Sphinx source for the **pypresscart** documentation site.
 
-- **Live site**: <https://annjawn.github.io/py-presscart/>
+- **Live site**: <https://pypresscart.github.io/py-presscart/>
 - **Theme**: [Furo](https://pradyunsg.me/furo/)
 - **Markdown parser**: [MyST](https://myst-parser.readthedocs.io/) (MyST markdown, not RST)
 - **API reference**: auto-generated via `sphinx.ext.autosummary` from source docstrings
