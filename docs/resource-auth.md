@@ -21,8 +21,7 @@ def whoami(
 
 **HTTP** `GET /auth/token`
 **Scope** any valid token
-
-**Returns** — [`TokenInfo`](models-reference.md#tokeninfo) with:
+**Returns** {py:class}`~pypresscart.models.auth.TokenInfo`. Key fields:
 
 | Field | Type | Description |
 |---|---|---|

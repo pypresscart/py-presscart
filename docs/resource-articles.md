@@ -35,7 +35,7 @@ def get(
 ) -> Article | dict
 ```
 
-Returns the article's brief URL, draft URL, live URL (when published), writer, current status, and expected completion date.
+**Returns** {py:class}`~pypresscart.models.Article` — the article's brief URL, draft URL, live URL (when published), writer, current status, and expected completion date.
 
 ```python
 art = client.articles.get("art_1")
@@ -54,6 +54,8 @@ def update(
     as_json: bool | None = None,
 ) -> Article | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.Article` — the updated article.
 
 **Body** ([`ArticleUpdateRequest`](models-reference.md#articleupdaterequest)):
 
@@ -87,7 +89,7 @@ def approve_brief(
 ) -> Article | dict
 ```
 
-No body. Returns the updated article.
+**Returns** {py:class}`~pypresscart.models.Article` — the updated article. No request body.
 
 ```python
 client.articles.approve_brief("art_1")
@@ -107,6 +109,8 @@ def approve_draft(
     as_json: bool | None = None,
 ) -> Article | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.Article` — the updated article.
 
 **Body** (optional) — `ApproveDraftRequest(draft_google_doc_url=...)`.
 

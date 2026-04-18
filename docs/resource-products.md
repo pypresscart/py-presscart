@@ -26,6 +26,8 @@ def get(
 ) -> Product | dict
 ```
 
+**Returns** {py:class}`~pypresscart.models.Product`.
+
 **Example**
 
 ```python
@@ -50,6 +52,8 @@ def list_listings(
     as_json: bool | None = None,
 ) -> Paginated[ProductListing] | dict
 ```
+
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.ProductListing`.
 
 **`sort_by`** options: `domain_authority` (default), `domain_ranking`, `price`, `created_at`, `name`
 
@@ -99,7 +103,7 @@ def list_categories(
 ) -> list[ProductCategoryCount] | list[dict]
 ```
 
-Returns counts per placement type for your team's accessible catalog:
+**Returns** a list of {py:class}`~pypresscart.models.ProductCategoryCount` — counts per placement type for your team's accessible catalog:
 
 ```python
 for row in client.products.list_categories():

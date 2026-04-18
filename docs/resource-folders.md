@@ -27,7 +27,7 @@ def list(
 ) -> Paginated[Folder] | dict
 ```
 
-`q` filters by folder name.
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.Folder`. `q` filters by folder name.
 
 ```python
 page = client.folders.list()
@@ -47,6 +47,8 @@ def create(
 ) -> Folder | dict
 ```
 
+**Returns** {py:class}`~pypresscart.models.Folder` — the newly created folder.
+
 ```python
 folder = client.folders.create({"name": "Q3 Assets"})
 print(folder.id)
@@ -65,6 +67,8 @@ def rename(
 ) -> Folder | dict
 ```
 
+**Returns** {py:class}`~pypresscart.models.Folder` — the renamed folder.
+
 ```python
 client.folders.rename("fld_1", {"name": "Q3 Assets (Archived)"})
 ```
@@ -80,6 +84,8 @@ def delete(
     as_json: bool | None = None,
 ) -> DeleteFolderResponse | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.DeleteFolderResponse` — has a boolean `success` field.
 
 > **Files inside the folder are not deleted.** They lose their folder association and become uncategorized.
 

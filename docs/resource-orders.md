@@ -29,6 +29,8 @@ def list(
 ) -> Paginated[Order] | dict
 ```
 
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.Order`.
+
 **Example**
 
 ```python
@@ -52,6 +54,8 @@ def get(
     as_json: bool | None = None,
 ) -> Order | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.Order`.
 
 **Example**
 
@@ -80,6 +84,8 @@ def create_checkout(
     as_json: bool | None = None,
 ) -> Order | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.Order` — the created order. If not yet paid, includes a `checkout_link` URL.
 
 **Request body** ([`CheckoutRequest`](models-reference.md#checkoutrequest)):
 

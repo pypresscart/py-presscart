@@ -27,7 +27,7 @@ def list(
 ) -> Paginated[OrderItem] | dict
 ```
 
-Returns a paginated list of [`OrderItem`](models-reference.md#orderitem) records. Each item has the purchased product, the associated article and campaign (if any), outlet, commission/accounting fields, and refund status.
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.OrderItem`. Each item has the purchased product, the associated article and campaign (if any), outlet, commission/accounting fields, and refund status.
 
 **Example**
 

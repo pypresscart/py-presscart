@@ -31,6 +31,8 @@ def list_team_profiles(
 ) -> Paginated[Profile] | dict
 ```
 
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.Profile`.
+
 **Example**
 
 ```python
@@ -58,6 +60,8 @@ def list_orders(
     as_json: bool | None = None,
 ) -> Paginated[Order] | dict
 ```
+
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.Order`.
 
 **`start_date`** / **`end_date`** — ISO-8601 date strings (e.g. `"2025-01-01"` or full timestamps).
 
@@ -90,6 +94,8 @@ def list_order_items(
 ) -> list[ProfileOrderItem] | list[dict]
 ```
 
+**Returns** a list of {py:class}`~pypresscart.models.ProfileOrderItem` — not the paginated envelope. See [Pagination](pagination.md).
+
 **Example**
 
 ```python
@@ -97,8 +103,6 @@ items = client.profiles.list_order_items("prof_1", is_add_on=False)
 for item in items:
     print(item.name, item.outlet.name)
 ```
-
-Note: returns `list[ProfileOrderItem]`, not `Paginated[...]`. See [Pagination](pagination.md).
 
 ---
 
@@ -113,6 +117,8 @@ def list_campaigns(
     as_json: bool | None = None,
 ) -> Paginated[Campaign] | dict
 ```
+
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.Campaign`.
 
 ## Recipes
 

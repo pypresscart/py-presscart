@@ -37,6 +37,8 @@ def list(
 ) -> Paginated[OutletListing] | dict
 ```
 
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.OutletListing`. See [Pagination](pagination.md).
+
 **`sort_by`** options: `name`, `created_at`, `domain_authority`, `domain_ranking`
 **`order_by`** options: `asc`, `desc` (default `desc`)
 
@@ -77,8 +79,6 @@ for row in page.records:
     print(f"{row.outlet_name:40}  ${row.prices[0].unit_amount/100:>7.2f}")
 ```
 
-**Returns** — `Paginated[OutletListing]`. See [Pagination](pagination.md).
-
 > Note: in the listing response, `id` is a **product id** (what you pass to `orders.create_checkout`). The outlet id is `outlet_id`.
 
 ---
@@ -94,6 +94,8 @@ def get(
     as_json: bool | None = None,
 ) -> Outlet | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.Outlet`.
 
 **Example**
 
@@ -124,6 +126,8 @@ def list_products(
 ) -> Paginated[OutletListing] | dict
 ```
 
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.OutletListing`.
+
 ---
 
 ### `list_countries`
@@ -136,7 +140,7 @@ def list_countries(
 ) -> CountriesResponse | dict
 ```
 
-Returns `{ "countries": ["United States", "Canada", ...] }`.
+**Returns** {py:class}`~pypresscart.models.CountriesResponse` — a wrapper around `{"countries": [...]}`.
 
 ---
 
@@ -150,7 +154,7 @@ def list_states(
 ) -> StatesResponse | dict
 ```
 
-Pass `country` to scope states to one country.
+**Returns** {py:class}`~pypresscart.models.StatesResponse` — a wrapper around `{"states": [...]}`. Pass `country` to scope states to one country.
 
 ---
 
@@ -165,6 +169,8 @@ def list_cities(
 ) -> CitiesResponse | dict
 ```
 
+**Returns** {py:class}`~pypresscart.models.CitiesResponse` — a wrapper around `{"cities": [...]}`.
+
 ---
 
 ### `list_tags`
@@ -178,6 +184,8 @@ def list_tags(
     as_json: bool | None = None,
 ) -> Paginated[Tag] | dict
 ```
+
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.Tag`.
 
 **`filters`**:
 
@@ -201,7 +209,7 @@ def list_disclaimers(
 ) -> Paginated[DisclaimerRecord] | dict
 ```
 
-Use `filters={"fetch_all": "true"}` to get them all at once.
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.DisclaimerRecord`. Use `filters={"fetch_all": "true"}` to get them all at once.
 
 ## Recipes
 

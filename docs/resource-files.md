@@ -34,7 +34,7 @@ def list(
 ) -> Paginated[File] | dict
 ```
 
-Pass `q="..."` to search by filename, `folder_id="..."` to scope to one folder.
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.File`. Pass `q="..."` to search by filename, `folder_id="..."` to scope to one folder.
 
 ---
 
@@ -48,7 +48,7 @@ def get(
 ) -> File | dict
 ```
 
-`file_id` accepts either the UUID `id` or the `file_key`.
+**Returns** {py:class}`~pypresscart.models.File`. `file_id` accepts either the UUID `id` or the `file_key`.
 
 ---
 
@@ -62,6 +62,8 @@ def upload(
     as_json: bool | None = None,
 ) -> UploadFilesResponse | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.UploadFilesResponse` — its `.files` attribute is a list of {py:class}`~pypresscart.models.UploadedFile`, one per uploaded file.
 
 **`files`** accepts any of:
 
@@ -127,7 +129,7 @@ def download(
 ) -> bytes
 ```
 
-Returns the raw bytes of the file. **This method does not support dual-mode** — there's no JSON to return.
+**Returns** the file's raw contents as `bytes`. This method doesn't support dual-mode — there's no JSON to return.
 
 ```python
 data = client.files.download("file_1")
@@ -147,6 +149,8 @@ def move(
     as_json: bool | None = None,
 ) -> MoveFilesResponse | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.MoveFilesResponse` — a thin wrapper with a `moved_count` field.
 
 **Body** ([`MoveFilesRequest`](models-reference.md#movefilesrequest)):
 
@@ -194,6 +198,8 @@ def delete(
     as_json: bool | None = None,
 ) -> DeleteFileResponse | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.DeleteFileResponse` — has a boolean `success` field.
 
 Returns `{"success": true}`.
 

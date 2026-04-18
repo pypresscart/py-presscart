@@ -35,6 +35,8 @@ def list(
 ) -> Paginated[Campaign] | dict
 ```
 
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.Campaign`.
+
 **`filters`**: `search` (str) — partial match on campaign name.
 
 **Example**
@@ -57,7 +59,7 @@ def get(
 ) -> Campaign | dict
 ```
 
-Returns a full `Campaign` including nested `profile` and `questionnaire`.
+**Returns** {py:class}`~pypresscart.models.Campaign` — the full record including nested `profile` and `questionnaire`.
 
 ---
 
@@ -74,6 +76,8 @@ def create(
     as_json: bool | None = None,
 ) -> Campaign | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.Campaign` — the newly created campaign.
 
 **Request body** ([`CampaignCreateRequest`](models-reference.md#campaigncreaterequest)):
 
@@ -128,6 +132,8 @@ def update(
 ) -> Campaign | dict
 ```
 
+**Returns** {py:class}`~pypresscart.models.Campaign` — the updated campaign.
+
 All fields on [`CampaignUpdateRequest`](models-reference.md#campaignupdaterequest) are optional — only send what you're changing.
 
 ```python
@@ -152,7 +158,7 @@ def list_articles(
 ) -> Paginated[CampaignArticleRow] | dict
 ```
 
-Each row includes the assigned writer, current status, and the article's brief/draft/live URLs.
+**Returns** a {py:class}`~pypresscart.models.Paginated` envelope of {py:class}`~pypresscart.models.CampaignArticleRow`. Each row includes the assigned writer, current status, and the article's brief/draft/live URLs.
 
 ---
 
@@ -165,6 +171,8 @@ def article_status_counts(
     as_json: bool | None = None,
 ) -> dict
 ```
+
+**Returns** a plain `dict` — this endpoint has a non-standard envelope so we don't wrap it. Individual entries match {py:class}`~pypresscart.models.ArticleStatusCount` if you need typed access.
 
 > This endpoint returns a non-standard envelope and is always returned as a `dict`, regardless of `response_mode`:
 >
@@ -193,9 +201,9 @@ def assign_order_items(
 ) -> dict
 ```
 
-**Body**: `{"order_item_ids": ["oi_1", "oi_2"]}`
+**Returns** a plain `dict` with shape `{"records": [{"id": "...", "campaign_id": "..."}, ...]}` — non-standard envelope, always a dict.
 
-Returns a non-standard `{"records": [{"id": "...", "campaign_id": "..."}, ...]}` — always a dict.
+**Body**: `{"order_item_ids": ["oi_1", "oi_2"]}`
 
 ```python
 from pypresscart import AssignOrderItemsRequest
@@ -224,6 +232,8 @@ def link_questionnaire(
     as_json: bool | None = None,
 ) -> Questionnaire | dict
 ```
+
+**Returns** {py:class}`~pypresscart.models.Questionnaire` — the updated questionnaire.
 
 **Body** ([`QuestionnaireLinkRequest`](models-reference.md#questionnairelinkrequest)):
 
