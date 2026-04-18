@@ -86,6 +86,25 @@ def test_list_team_profiles(mocked: responses.RequestsMock, client: PresscartCli
     assert isinstance(page.records[0], Profile)  # type: ignore[union-attr]
 
 
+def test_profile_primary_goals_accepts_json_array() -> None:
+    prof = Profile.model_validate(
+        {"id": "prof_1", "primary_goals": ["BRAND_AWARENESS", "THOUGHT_LEADERSHIP"]}
+    )
+    assert prof.primary_goals == ["BRAND_AWARENESS", "THOUGHT_LEADERSHIP"]
+
+
+def test_profile_primary_goals_accepts_pg_array_literal() -> None:
+    prof = Profile.model_validate(
+        {"id": "prof_1", "primary_goals": "{BRAND_AWARENESS,THOUGHT_LEADERSHIP}"}
+    )
+    assert prof.primary_goals == ["BRAND_AWARENESS", "THOUGHT_LEADERSHIP"]
+
+
+def test_profile_primary_goals_accepts_empty_pg_array() -> None:
+    assert Profile.model_validate({"id": "p", "primary_goals": "{}"}).primary_goals == []
+    assert Profile.model_validate({"id": "p", "primary_goals": ""}).primary_goals == []
+
+
 def test_list_order_items(mocked: responses.RequestsMock, client: PresscartClient) -> None:
     mocked.add(
         responses.GET,

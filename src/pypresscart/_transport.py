@@ -196,7 +196,21 @@ def _safe_json(response: requests.Response) -> dict[str, Any] | None:
 
 
 def _clean_params(params: Mapping[str, Any] | None) -> dict[str, Any] | None:
-    """Drop keys whose values are None so they don't appear in the query string."""
+    """Normalize query params before sending.
+
+    - drops keys whose value is ``None``
+    - lowercases booleans to ``"true"``/``"false"`` — ``requests`` would
+      otherwise emit Python's ``"True"`` / ``"False"``, which the Presscart
+      API rejects with a 400.
+    """
     if params is None:
         return None
-    return {k: v for k, v in params.items() if v is not None}
+    out: dict[str, Any] = {}
+    for k, v in params.items():
+        if v is None:
+            continue
+        if isinstance(v, bool):
+            out[k] = "true" if v else "false"
+        else:
+            out[k] = v
+    return out

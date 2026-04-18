@@ -118,6 +118,27 @@ def test_transport_strips_none_query_params(
     assert "limit=10" in url
 
 
+def test_transport_lowercases_boolean_query_params(
+    mocked: responses.RequestsMock, client: PresscartClient
+) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/profiles/prof_1/orders",
+        json={
+            "records": [],
+            "total_records": 0,
+            "total_pages": 0,
+            "current_page": 1,
+            "next_page": None,
+            "previous_page": None,
+        },
+    )
+    client.profiles.list_orders("prof_1", paid_orders_only=True)
+    url = mocked.calls[0].request.url
+    assert "paid_orders_only=true" in url
+    assert "paid_orders_only=True" not in url
+
+
 def test_transport_init_defaults() -> None:
     import requests
 

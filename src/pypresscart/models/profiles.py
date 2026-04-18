@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Any
+
+from pydantic import field_validator
 
 from pypresscart.models._common import PresscartModel
 
@@ -28,6 +31,38 @@ class Profile(PresscartModel):
     created_at: datetime | None = None
     updated_at: datetime | None = None
     deleted_at: datetime | None = None
+
+    @field_validator("primary_goals", mode="before")
+    @classmethod
+    def _accept_pg_or_json_array(cls, v: Any) -> Any:
+        """Accept both JSON arrays and Postgres-array literals.
+
+        The Presscart API currently returns ``primary_goals`` as a Postgres
+        array literal (``"{A,B,C}"``) instead of the JSON array (``["A","B","C"]``)
+        promised by the public docs. This validator normalizes both shapes so
+        the field always ends up as a ``list[str]``:
+
+            ``["A", "B"]``      → passed through as a list
+            ``"{A,B}"``         → parsed to ``["A", "B"]``
+            ``"{}"`` / ``""``   → ``[]``
+            anything else       → left alone (Pydantic will raise)
+
+        This is a server-side bug on Presscart's side (see ``testing/bugs.md``
+        issue #2). Once the API is corrected, this validator becomes a no-op
+        for the JSON path and can be removed.
+        """
+        if v is None:
+            return []
+        if isinstance(v, str):
+            s = v.strip()
+            if not s:
+                return []
+            if s.startswith("{") and s.endswith("}"):
+                inner = s[1:-1].strip()
+                if not inner:
+                    return []
+                return [item.strip().strip('"') for item in inner.split(",")]
+        return v
 
 
 __all__ = ["Profile"]
