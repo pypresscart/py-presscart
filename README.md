@@ -202,6 +202,88 @@ uv run pre-commit install --hook-type pre-push # pytest on every push
 uv run pre-commit run --all-files              # run everything now
 ```
 
+### Branch protection
+
+`main` is protected — no direct pushes. Every change goes through a pull
+request that must pass CI (ruff, ruff format, mypy, pytest on Python 3.10
+through 3.13, and the distribution build) before it can merge. Force-pushes
+and branch deletion are denied.
+
+## Releasing
+
+Releases are cut by a human via the `Release` GitHub Actions workflow, which
+uses **OIDC trusted publishing** — no PyPI tokens are stored anywhere.
+
+### Prerequisites (one-time)
+
+- Project `pypresscart` registered as a trusted publisher on both
+  [PyPI](https://pypi.org/manage/account/publishing/) and
+  [TestPyPI](https://test.pypi.org/manage/account/publishing/), pointing at
+  this repo + workflow `release.yml` + environments `pypi` / `testpypi`.
+- GitHub repo environments `pypi` and `testpypi` exist.
+  Optionally add required reviewers on `pypi` if you want a human to
+  approve every prod publish.
+
+### Cutting a new release
+
+1. **Decide the version.** Follow [SemVer](https://semver.org/):
+   - `MAJOR` — anything that could break existing callers (renames, removed
+     fields, changed defaults, raised minimum Python).
+   - `MINOR` — backwards-compatible additions (new endpoints, new optional
+     parameters).
+   - `PATCH` — bug fixes only.
+
+2. **Open a bump PR.** On a branch, update both:
+   - `src/pypresscart/_version.py` — `__version__ = "X.Y.Z"`
+   - `pyproject.toml` — `[project].version = "X.Y.Z"`
+
+   Also add an entry to `docs/changelog.md` under `## [Unreleased]` and roll
+   it into a new `## [X.Y.Z] — <date>` heading.
+
+3. **Merge the PR.** Wait for CI to go green, then merge. The docs site
+   rebuilds and picks up the new version string automatically.
+
+4. **Publish to TestPyPI first.** Actions → **Release** → **Run workflow**
+   → pick `testpypi` → run. Wait for green.
+
+5. **Smoke-test from TestPyPI** in a throwaway environment:
+
+   ```bash
+   uv run --no-project \
+       --with pypresscart==X.Y.Z \
+       --index-url https://test.pypi.org/simple/ \
+       --extra-index-url https://pypi.org/simple/ \
+       python -c "from pypresscart import PresscartClient, __version__; print(__version__)"
+   ```
+
+6. **Publish to PyPI.** Actions → **Release** → **Run workflow** →
+   pick `pypi` → run. (If you added required reviewers on the `pypi`
+   environment, approve the deployment when prompted.)
+
+7. **Tag and announce.**
+
+   ```bash
+   git tag -a vX.Y.Z -m "pypresscart X.Y.Z"
+   git push origin vX.Y.Z
+
+   gh release create vX.Y.Z \
+       --title "pypresscart X.Y.Z" \
+       --notes-file <(awk '/^## \[X\.Y\.Z\]/,/^## \[/' docs/changelog.md | sed '$d')
+   ```
+
+### If something goes wrong
+
+- **Published a broken version?** You can't overwrite a PyPI release. Cut a
+  new patch release (`X.Y.Z+1`) that reverts or fixes the issue. `yank` on
+  PyPI hides the broken version from resolvers but keeps it available to
+  pinned installs.
+- **TestPyPI upload failed but PyPI didn't run?** Re-dispatch with
+  `target=testpypi`. The workflow has `skip-existing: true` on TestPyPI
+  so re-uploading the same version is a no-op.
+- **Trusted publisher rejected the OIDC token?** Confirm the pending
+  publisher on PyPI has the exact workflow filename (`release.yml`) and
+  environment name (`pypi` / `testpypi`). One-character typos fail silently.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

@@ -1,19 +1,13 @@
 name: CI
 
 on:
+  # No paths-ignore here: branch protection requires every CI check to pass
+  # before merge. Ignoring paths would let doc-only PRs deadlock against that
+  # requirement. The workflow is fast enough (<2 min) that running on every
+  # change is the simplest correct behavior.
   push:
     branches: [main]
-    paths-ignore:
-      - "docs/**"
-      - "testing/**"
-      - "**.md"
-      - ".github/workflows/docs.yml"
   pull_request:
-    paths-ignore:
-      - "docs/**"
-      - "testing/**"
-      - "**.md"
-      - ".github/workflows/docs.yml"
   workflow_dispatch:
 
 permissions:
