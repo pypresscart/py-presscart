@@ -34,3 +34,6 @@ api-docs/
 # Sphinx build artifacts
 docs/_build/
 docs/_autosummary/
+
+# Local integration testing (contains real API tokens)
+testing/

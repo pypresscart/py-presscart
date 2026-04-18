@@ -39,7 +39,7 @@ class OrderItem(PresscartModel):
     referrer_id: str | None = None
     referrer_team_id: str | None = None
     product_id: str | None = None
-    commission_amount: int | None = None
+    commission_amount: float | None = None
     commission_date_paid: datetime | None = None
     commission_status: str | None = None
     is_accounting_completed: bool | None = None
@@ -51,7 +51,7 @@ class OrderItem(PresscartModel):
     refund_method: str | None = None
     refund_reference: str | None = None
     vendor_invoice_id: str | None = None
-    vendor_cost: int | None = None
+    vendor_cost: float | None = None
     vendor_invoice_date: datetime | None = None
     vendor_paid_date: datetime | None = None
     vendor_invoice_url: str | None = None
@@ -64,14 +64,14 @@ class OrderItem(PresscartModel):
     order_id: str | None = None
     client_id: str | None = None
     date_paid: datetime | None = None
-    sale_price: int | None = None
+    sale_price: float | None = None
     product_name: str | None = None
-    product_price: int | None = None
+    product_price: float | None = None
     product_type: str | None = None
     article_id: str | None = None
     article: OrderItemArticle | None = None
-    internal_cost: int | None = None
-    reseller_price: int | None = None
+    internal_cost: float | None = None
+    reseller_price: float | None = None
     client: OrderItemClient | None = None
     outlet: OutletRef | None = None
 

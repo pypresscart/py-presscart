@@ -37,6 +37,10 @@ for order in page.records:
     print(order.reference_number, order.status, order.total)
 ```
 
+:::{note}
+Order money fields (`total`, `subtotal`, `processing_fee`, `discount`, `credits_applied`, `LineItem.price`) are returned as **floats in dollar units** — e.g. `154.5` means $154.50. This is different from product listings, which return prices in **cents**. See [Monetary units](models-reference.md#price) in the Models Reference.
+:::
+
 ---
 
 ### `get`
@@ -79,7 +83,7 @@ def create_checkout(
 |---|---|---|---|
 | `profile_id` | `str` | ✅ | UUID of the profile placing the order |
 | `line_items` | `list[CheckoutLineItem]` | ✅ | Non-empty |
-| `discount` | `int` | ❌ | USD cents, defaults to 0 |
+| `discount` | `float` | ❌ | Defaults to 0 |
 
 **Line item** ([`CheckoutLineItem`](models-reference.md#checkoutlineitem)):
 

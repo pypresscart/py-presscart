@@ -16,8 +16,8 @@ from pypresscart.models._common import (
 class OutletChannelSummary(PresscartModel):
     """Channel summary included in outlet listings."""
 
-    channel_type: ChannelType | str
-    placement_type: PlacementType | str
+    channel_type: ChannelType | str | None = None
+    placement_type: PlacementType | str | None = None
     is_do_follow: bool | None = None
     domain_authority: int | None = None
     domain_ranking: int | None = None
@@ -30,8 +30,8 @@ class OutletChannel(PresscartModel):
 
     id: str
     outlet_id: str | None = None
-    channel_type: ChannelType | str
-    placement_type: PlacementType | str
+    channel_type: ChannelType | str | None = None
+    placement_type: PlacementType | str | None = None
     channel_handle: str | None = None
     channel_url: str | None = None
     social_links: list[str] = []

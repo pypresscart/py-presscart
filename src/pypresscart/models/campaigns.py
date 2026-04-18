@@ -50,7 +50,7 @@ class Campaign(PresscartModel):
     status: str | None = None
     goals: str | None = None
     target_date: datetime | None = None
-    budget: int | None = None
+    budget: float | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
     deleted_at: datetime | None = None

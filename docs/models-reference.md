@@ -37,18 +37,24 @@ class Tag:
 
 ```python
 class Price:
-    unit_amount: int        # cents
+    unit_amount: float      # see note below
     currency: str | None    # usually "usd"
     pricing_tier: str | None
 ```
+
+:::{warning}
+**Monetary units are not uniform across the Presscart API.** On `/products/listings`, `/products/{id}`, and outlet channel prices, `unit_amount` is returned in **cents** (integer, e.g. `575` means $5.75). On `/orders*`, the money fields (`total`, `subtotal`, `processing_fee`, `discount`, etc.) come back in **dollars** (float, e.g. `154.5` means $154.50). `pypresscart` surfaces whatever the API returns — always confirm the unit for the endpoint you're on before formatting.
+:::
 
 ### `IncludeItem`
 
 ```python
 class IncludeItem:
-    channel_type: ChannelType | str
-    placement_type: PlacementType | str
+    channel_type: ChannelType | str | None
+    placement_type: PlacementType | str | None
 ```
+
+Both types are nullable because the API occasionally returns `null` for them.
 
 ## Enums
 
@@ -142,7 +148,7 @@ Body for `client.orders.create_checkout()`.
 |---|---|
 | `profile_id` | `str` |
 | `line_items` | `list[CheckoutLineItem]` |
-| `discount` | `int \| None` (default `0`) |
+| `discount` | `float \| None` (default `0`) |
 
 ### `CheckoutLineItem`
 
@@ -325,3 +331,9 @@ body.model_dump(mode="json", exclude_none=True)
 ### Forward compatibility
 
 If Presscart adds a new field to a response, `pypresscart` won't raise a validation error — the extra data is preserved on the parsed model (accessible as `model.model_extra`) but not typed. Upgrade the library to pick up the typed attribute once it's available.
+
+### Lenient parsing
+
+The API occasionally sends an **empty string** (`""`) in place of `null` for optional fields — especially booleans and dates. `pypresscart` normalizes `""` to `None` before validation, so you don't get spurious type errors on what is semantically a missing value.
+
+If you need the raw payload byte-for-byte, use `as_json=True` (see [Dual-Mode I/O](dual-mode.md)).

@@ -22,7 +22,7 @@ class CheckoutRequest(PresscartModel):
 
     profile_id: str
     line_items: list[CheckoutLineItem]
-    discount: int | None = 0
+    discount: float | None = 0
 
 
 class OutletRef(PresscartModel):
@@ -41,7 +41,7 @@ class LineItem(PresscartModel):
     order_id: str | None = None
     product_id: str
     quantity: int
-    price: int
+    price: float | None = None
     is_add_on: bool | None = None
     linked_order_line_item_id: str | None = None
     name: str | None = None
@@ -67,11 +67,11 @@ class Order(PresscartModel):
     client_id: str | None = None
     checkout_by_id: str | None = None
     team_id: str | None = None
-    total: int | None = None
-    subtotal: int | None = None
-    processing_fee: int | None = None
-    discount: int | None = None
-    credits_applied: int | None = None
+    total: float | None = None
+    subtotal: float | None = None
+    processing_fee: float | None = None
+    discount: float | None = None
+    credits_applied: float | None = None
     coupon: str | None = None
     client_secret: str | None = None
     date_paid: datetime | None = None
