@@ -128,6 +128,7 @@ intersphinx_mapping = {
 
 html_theme = "shibuya"
 html_title = "pypresscart"
+html_baseurl = "https://pypresscart.github.io/py-presscart/"
 html_static_path = ["_static"]
 html_last_updated_fmt = "%Y-%m-%d"
 
