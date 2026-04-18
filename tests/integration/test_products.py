@@ -31,8 +31,9 @@ def test_list_listings_default(live_client: PresscartClient) -> None:
 
 
 def test_list_listings_with_array_filter(live_client: PresscartClient) -> None:
-    """Regression guard for the filters[channel_types][]=... bracket notation
-    (issue #5). The earlier shape filters[channel_types]=WEBSITE was rejected."""
+    """Regression guard for the filters[channel_types][0]=... indexed bracket
+    notation. Earlier shapes filters[channel_types]=WEBSITE (issue #5) and
+    filters[channel_types][]=WEBSITE were both silently ignored by the API."""
     page = live_client.products.list_listings(limit=3, filters={"channel_types": ["WEBSITE"]})
     assert isinstance(page, Paginated)
 
