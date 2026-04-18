@@ -1,6 +1,6 @@
 # CLAUDE.md — pypresscart Python SDK
 
-This repo is a **PyPI-publishable Python client library** (unofficial) for the [Presscart API](https://docs.presscart.com). Design is modeled on [annjawn/loops-py](https://github.com/annjawn/loops-py). The package ships on PyPI as `pypresscart` and imports as `pypresscart`.
+This repo is a **PyPI-publishable Python client library** (unofficial) for the [Presscart API](https://docs.presscart.com). The package ships on PyPI as `pypresscart` and imports as `pypresscart`.
 
 ## Directory map
 
@@ -15,7 +15,7 @@ This repo is a **PyPI-publishable Python client library** (unofficial) for the [
 | `api-docs/` | **Source of truth** — scraped Presscart API docs. Do not edit. |
 | `tests/` | pytest suite, mocks via `responses` |
 | `examples/` | Runnable usage examples |
-| `.claude/` | Local agent config (gitignored) |
+| `.claude/` | Agent config (skills, agents, rules) — checked in, changes go through a PR |
 
 ## Core invariants
 
@@ -51,7 +51,6 @@ The docs site is at <https://pypresscart.github.io/py-presscart/>, deployed by
 ## Hard rules
 
 - **Never** add `Co-Authored-By: Claude ...` (or any Claude/Anthropic co-author trailer) to commit messages. See [.claude/rules/no-claude-coauthor.md](.claude/rules/no-claude-coauthor.md).
-- **Never** commit `CLAUDE.md` or `.claude/` — both are gitignored.
 - **Never** widen the runtime dependency list without explicit user approval. See [.claude/rules/library-hygiene.md](.claude/rules/library-hygiene.md).
 - **Never** implement an async variant unless asked. Single sync client only.
 
