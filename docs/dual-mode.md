@@ -40,11 +40,11 @@ client.orders.create_checkout(
 )
 ```
 
-Internally the library runs `model.model_dump(mode="json", exclude_none=True)` for Pydantic inputs and passes dicts through as-is.
+### Fields set to `None` are omitted, not sent as `null`
 
-### `exclude_none=True`
+When you pass a Pydantic model, any field left as `None` is **dropped** from the JSON body rather than serialized as `null`. That usually matches what the API expects.
 
-Pydantic inputs drop `None` fields before serialization. This matches the API, which treats missing and explicitly-null fields differently for some routes. If you *need* to send `null`, pass a dict:
+If an endpoint actually needs an explicit `null` — e.g. clearing a field that was previously set — pass a dict:
 
 ```python
 client.campaigns.update("cmp_1", {"writing_samples": None})

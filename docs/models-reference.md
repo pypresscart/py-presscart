@@ -1,8 +1,14 @@
 # Models Reference
 
-Every request/response shape has a Pydantic model under `pypresscart.models`, re-exported at the top level. This page lists the public models and their key fields. For full field detail, see the source or use `.model_fields` at runtime.
+Every request and response shape has a typed Pydantic model. This page is a quick index of what each model represents and the fields you'll use most often. For the full, auto-generated field lists, see the [API Reference](api-reference.md).
 
-> All models inherit `PresscartModel` (which is `pydantic.BaseModel` with `extra="allow"` so forward-compatible API fields don't cause validation errors).
+You can import any of these from the top-level package:
+
+```python
+from pypresscart import Order, Campaign, CheckoutRequest, TokenInfo  # etc.
+```
+
+Models accept unknown fields silently — so if Presscart adds a new field, your existing code won't break. See [Forward compatibility](#forward-compatibility) at the bottom.
 
 ## Shared primitives
 
@@ -318,4 +324,4 @@ body.model_dump(mode="json", exclude_none=True)
 
 ### Forward compatibility
 
-All models use `extra="allow"`, so new fields the API adds don't break validation — they're preserved on the instance (accessible via `model.model_extra`) but not type-checked.
+If Presscart adds a new field to a response, `pypresscart` won't raise a validation error — the extra data is preserved on the parsed model (accessible as `model.model_extra`) but not typed. Upgrade the library to pick up the typed attribute once it's available.

@@ -39,7 +39,7 @@ for oi in page.records:
 
 ### What's visible
 
-Internal-cost and reseller-price fields (`internal_cost`, `reseller_price`) are always `null` for API tokens. Those are reserved for team-dashboard views.
+`internal_cost` and `reseller_price` will always be `null` on the API. Don't rely on them in your integration.
 
 ## Recipes
 

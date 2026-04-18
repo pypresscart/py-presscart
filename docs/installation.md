@@ -29,16 +29,16 @@ poetry add pypresscart
 python -c "from pypresscart import PresscartClient, __version__; print(__version__)"
 ```
 
-## Runtime dependencies
+## Dependencies
 
-`pypresscart` installs only two runtime dependencies:
+`pypresscart` installs only two packages:
 
 | Package | Why |
 |---|---|
 | [`requests`](https://requests.readthedocs.io/) | HTTP transport |
 | [`pydantic`](https://docs.pydantic.dev/) (v2) | Request/response models |
 
-Everything else — testing, linting, typing — is in the `dev` dependency group and not installed by users.
+Both are widely used, well-maintained, and likely already in your environment.
 
 ## Upgrading
 

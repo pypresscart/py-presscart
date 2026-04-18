@@ -16,11 +16,15 @@ User-Agent: pypresscart/<version>
 
 You can override the `User-Agent` via `PresscartClient(..., user_agent="my-app/1.0")`. See [Client Configuration](client-configuration.md).
 
-## Token format
+## Getting a token
 
-- Tokens are prefixed with `pc_`.
-- The raw token is only shown at creation/regeneration time — store it securely.
-- Tokens are stored hashed server-side.
+API tokens are issued by Presscart to partners with an active agreement — they aren't self-serve through the dashboard. If you don't have one yet, reach out to Presscart to start the partner onboarding process.
+
+Once issued:
+
+- Tokens start with `pc_`.
+- The raw value is only shown once, at issuance. Keep it somewhere safe (a secret manager, `.env` file excluded from version control, etc.).
+- Never hardcode a token into source you publish. If a token leaks, contact Presscart to rotate it.
 
 ## Token types
 
@@ -104,4 +108,4 @@ if not token:
 client = PresscartClient(api_token=token)
 ```
 
-For `.env` files, use `python-dotenv` (not a runtime dep of `pypresscart`).
+For `.env` files, use [`python-dotenv`](https://pypi.org/project/python-dotenv/) and call `load_dotenv()` before instantiating the client.

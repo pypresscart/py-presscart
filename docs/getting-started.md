@@ -12,7 +12,9 @@ See [Installation](installation.md) for alternatives.
 
 ## 2. Get an API token
 
-Create a token in your Presscart dashboard. Tokens look like `pc_xxxx_xxxxxxx_xxxxxxxx_xxxxxxxx`. Store it in an environment variable — **never** hardcode it:
+API tokens are provisioned by Presscart for partners on an active agreement — they aren't self-serve. If you don't have one, contact Presscart to start partner onboarding.
+
+Once you have a token (it starts with `pc_`), put it in an environment variable — **never** hardcode it:
 
 ```bash
 export PRESSCART_API_TOKEN="pc_..."
