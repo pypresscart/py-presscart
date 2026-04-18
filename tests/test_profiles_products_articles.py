@@ -45,6 +45,38 @@ def test_list_product_listings(mocked: responses.RequestsMock, client: Presscart
     assert isinstance(page.records[0], ProductListing)  # type: ignore[union-attr]
 
 
+def test_list_product_listings_array_filter_is_indexed(
+    mocked: responses.RequestsMock, client: PresscartClient
+) -> None:
+    """Array filters must go out as filters[key][0]=... indexed brackets —
+    the bare [] form is silently ignored by the Presscart API."""
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/products/listings",
+        json={
+            "records": [],
+            "total_records": 0,
+            "total_pages": 1,
+            "current_page": 1,
+            "next_page": None,
+            "previous_page": None,
+        },
+    )
+    client.products.list_listings(
+        filters={
+            "disclaimer_ids": ["abc", "def"],
+            "placement_types": ["FULL_FEATURE"],
+            "country": "United States",
+        },
+    )
+    url = mocked.calls[0].request.url
+    assert "filters%5Bdisclaimer_ids%5D%5B0%5D=abc" in url
+    assert "filters%5Bdisclaimer_ids%5D%5B1%5D=def" in url
+    assert "filters%5Bplacement_types%5D%5B0%5D=FULL_FEATURE" in url
+    assert "filters%5Bcountry%5D=United+States" in url
+    assert "filters%5Bdisclaimer_ids%5D%5B%5D" not in url
+
+
 def test_list_product_categories(mocked: responses.RequestsMock, client: PresscartClient) -> None:
     mocked.add(
         responses.GET,

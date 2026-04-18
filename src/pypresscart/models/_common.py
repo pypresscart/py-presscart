@@ -108,9 +108,10 @@ class Disclaimer(PresscartModel):
 def serialize_filters(prefix: str, values: dict[str, Any] | None) -> dict[str, Any]:
     """Turn a dict into ``prefix[key]=value`` query params (server's expected shape).
 
-    List values are emitted as ``prefix[key][]=v1&prefix[key][]=v2`` (PHP/Rails
-    bracket notation) — the Presscart API requires that form for array filters
-    like ``channel_types``, ``tags``, ``product_ids``.
+    List values are emitted as ``prefix[key][0]=v1&prefix[key][1]=v2`` (qs
+    indexed-bracket notation) — the Presscart API requires that form for array
+    filters like ``channel_types``, ``tags``, ``product_ids``; the bare ``[]``
+    form is silently ignored by the server.
     """
     if not values:
         return {}
@@ -119,7 +120,8 @@ def serialize_filters(prefix: str, values: dict[str, Any] | None) -> dict[str, A
         if val is None:
             continue
         if isinstance(val, (list, tuple)):
-            out[f"{prefix}[{key}][]"] = list(val)
+            for i, item in enumerate(val):
+                out[f"{prefix}[{key}][{i}]"] = item
         else:
             out[f"{prefix}[{key}]"] = val
     return out
