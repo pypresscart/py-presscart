@@ -1,0 +1,123 @@
+"""Spot tests for profiles / products / articles / order_items."""
+
+from __future__ import annotations
+
+import responses
+
+from pypresscart import (
+    Article,
+    OrderItem,
+    PresscartClient,
+    Product,
+    ProductListing,
+    Profile,
+    ProfileOrderItem,
+)
+from tests.conftest import BASE_URL
+
+
+def test_get_product(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/products/prod_1",
+        json={"id": "prod_1", "name": "Feature"},
+    )
+    product = client.products.get("prod_1")
+    assert isinstance(product, Product)
+
+
+def test_list_product_listings(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/products/listings",
+        json={
+            "records": [
+                {"id": "prod_1", "name": "Feature", "tags": [], "prices": [], "includes": []}
+            ],
+            "total_records": 1,
+            "total_pages": 1,
+            "current_page": 1,
+            "next_page": None,
+            "previous_page": None,
+        },
+    )
+    page = client.products.list_listings(filters={"min_price": 100})
+    assert isinstance(page.records[0], ProductListing)  # type: ignore[union-attr]
+
+
+def test_list_product_categories(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/products/categories",
+        json=[{"type": "FULL_FEATURE", "count": 5}],
+    )
+    cats = client.products.list_categories()
+    assert cats[0].type == "FULL_FEATURE"  # type: ignore[union-attr]
+
+
+def test_profile_order_items_bare_array(
+    mocked: responses.RequestsMock, client: PresscartClient
+) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/profiles/prof_1/order-items",
+        json=[
+            {"id": "oi_1", "name": "Feature", "includes": []},
+        ],
+    )
+    items = client.profiles.list_order_items("prof_1")
+    assert isinstance(items[0], ProfileOrderItem)
+
+
+def test_list_team_profiles(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/teams/team_1/profiles",
+        json={
+            "records": [{"id": "prof_1", "name": "Brand"}],
+            "total_records": 1,
+            "total_pages": 1,
+            "current_page": 1,
+            "next_page": None,
+            "previous_page": None,
+        },
+    )
+    page = client.profiles.list_team_profiles("team_1")
+    assert isinstance(page.records[0], Profile)  # type: ignore[union-attr]
+
+
+def test_list_order_items(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/order-items",
+        json={
+            "records": [{"id": "oi_1"}],
+            "total_records": 1,
+            "total_pages": 1,
+            "current_page": 1,
+            "next_page": None,
+            "previous_page": None,
+        },
+    )
+    page = client.order_items.list()
+    assert isinstance(page.records[0], OrderItem)  # type: ignore[union-attr]
+
+
+def test_article_approve_brief(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.PATCH,
+        f"{BASE_URL}/articles/art_1/approve-brief",
+        json={"id": "art_1", "name": "approved"},
+    )
+    result = client.articles.approve_brief("art_1")
+    assert isinstance(result, Article)
+
+
+def test_article_update(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.PUT,
+        f"{BASE_URL}/articles/art_1",
+        json={"id": "art_1", "name": "New"},
+    )
+    result = client.articles.update("art_1", {"name": "New"})
+    assert isinstance(result, Article)
