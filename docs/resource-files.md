@@ -101,12 +101,20 @@ for f in resp.files:
 `pypresscart` opens any file paths you pass and closes them automatically.
 
 :::{note}
-**MIME types:** the server validates the multipart Content-Type against an
-allow-list (`image/jpeg`, `image/png`, `application/pdf`, …). When you pass
-a path or file handle, the library guesses the type from the filename
-extension via :py:func:`mimetypes.guess_type`; unknown extensions fall back
-to `application/octet-stream`. If you're uploading from a buffer with an
-unusual name, pass a `(filename, fileobj, content_type)` tuple explicitly.
+**MIME types are detected from content, not just the extension.** The
+library sniffs the first 64 bytes for magic-byte signatures (JPEG, PNG,
+WebP, GIF, BMP, TIFF, PDF, DOC, DOCX/XLSX/PPTX via ZIP + extension).
+This catches files with wrong or missing extensions.
+
+Precedence on upload:
+
+1. Magic-byte sniff of the stream
+2. Extension-based guess (:py:func:`mimetypes.guess_type`)
+3. `application/octet-stream` fallback
+
+If you want to force a specific type (e.g. from a buffer where you already
+know the content), pass a `(filename, fileobj, content_type)` tuple — the
+library uses your value as-is without sniffing.
 :::
 
 ---
