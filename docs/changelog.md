@@ -4,6 +4,25 @@ All notable changes to `pypresscart` are recorded here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.4] — 2026-05-08
+
+### Added
+- `Order.name` and `Order.email` — top-level fields returned by
+  `GET /orders/{order_id}` (the list endpoint nests these as `team.name` /
+  `team.contact_email`; both shapes are now modelled in parallel).
+- `LineItem.includes: list[IncludeItem] | None` — channel/placement array
+  surfaced on `GET /orders/{order_id}` line items.
+
+### Fixed
+- `LineItem.id` and `LineItem.order_id` are now optional. The Presscart API
+  doesn't populate them on the lean `POST /orders/checkout` response (line
+  items are only persisted with an id once the order is paid, exposed via
+  `GET /order-items`), which previously caused checkout responses to fail
+  Pydantic validation.
+
+### Changed
+- Removed the strict-`xfail` trip-wire on the `tests/integration/test_articles.py::test_get_article` live test. Presscart fixed the `GET /articles/{article_id}` 403 for `full_access` API tokens (issue #8), and the live test now passes. Documentation under `docs/testing-status.md` and `docs/resource-articles.md` updated accordingly.
+
 ## [0.1.3] — 2026-04-18
 
 ### Fixed
@@ -50,7 +69,8 @@ Initial public release.
 - Runtime: `pydantic>=2.7,<3`, `requests>=2.31,<3`.
 - Python 3.10+.
 
-[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.4
 [0.1.3]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.3
 [0.1.2]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.2
 [0.1.1]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.1
