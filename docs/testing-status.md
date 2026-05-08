@@ -35,6 +35,7 @@ Every GET below was hit with a `full_access` token, the response was parsed into
 | Campaigns | `get` | `GET /campaigns/{campaign_id}` |
 | Campaigns | `list_articles` | `GET /campaigns/{campaign_id}/articles` |
 | Campaigns | `article_status_counts` | `GET /campaigns/{campaign_id}/articles/status-count` |
+| Articles | `get` | `GET /articles/{article_id}` |
 
 ## Files + Folders — full write round-trip
 
@@ -54,14 +55,6 @@ The Files and Folders resources have been exercised **end-to-end including write
 | Files | `delete` | `DELETE /files/{file_id}` |
 
 Download bytes are verified to match the uploaded file **SHA-256 for SHA-256** before delete — so the compression / CDN round-trip is confirmed lossless.
-
-## Blocked upstream — tested but server denies access
-
-| Resource | Method | Endpoint | Status |
-|---|---|---|---|
-| Articles | `get` | `GET /articles/{article_id}` | Server returns **403** to `full_access` tokens. See [issue #8](https://github.com/pypresscart/py-presscart/issues/8). |
-
-Because `articles.get()` is the only way to fetch a single article's full detail (brief URL, draft URL, writer, etc.), the **Articles write endpoints below are effectively gated behind this fix**. They're wired up and type-checked, but you can't realistically use them today without first resolving issue #8 on the server side.
 
 ## Not yet exercised — write endpoints with real-world side effects
 
@@ -90,8 +83,8 @@ Use in production with appropriate caution. Run a dry-run against a staging team
 
 | Method | Endpoint | Why untested |
 |---|---|---|
-| `update` | `PUT /articles/{article_id}` | Blocked transitively by issue #8 — can't read current state first. |
-| `approve_brief` | `PATCH /articles/{article_id}/approve-brief` | Same — plus approving a real brief advances the article through the workflow. |
+| `update` | `PUT /articles/{article_id}` | Mutates a real article on the target team; not safe as a smoke test. |
+| `approve_brief` | `PATCH /articles/{article_id}/approve-brief` | Advances the article through the workflow and may trigger writer/notification side effects. |
 | `approve_draft` | `PATCH /articles/{article_id}/approve-draft` | Same. |
 
 ## Unit-test coverage
