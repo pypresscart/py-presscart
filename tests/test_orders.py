@@ -127,9 +127,7 @@ def test_get_order_parses_line_item_includes(
                 "quantity": 1,
                 "price": 1500,
                 "is_add_on": False,
-                "includes": [
-                    {"channel_type": "NEWSLETTER", "placement_type": "MENTION"}
-                ],
+                "includes": [{"channel_type": "NEWSLETTER", "placement_type": "MENTION"}],
             }
         ],
     }
