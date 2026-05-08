@@ -65,3 +65,81 @@ def test_create_checkout_with_dict_body(
     )
     assert isinstance(raw, dict)
     assert raw["id"] == "ord_1"
+
+
+def test_create_checkout_parses_line_items_without_id(
+    mocked: responses.RequestsMock, client: PresscartClient
+) -> None:
+    """The live Presscart API doesn't include an `id` on line items in
+    the checkout response (line items are only persisted with an id
+    once the order is paid, exposed via ``GET /order-items``). The
+    ``LineItem`` model must therefore allow ``id`` to be missing.
+    """
+    payload = {
+        "id": "ord_2",
+        "profile_id": "prof_1",
+        "status": "CREATED",
+        "total": 50000,
+        "subtotal": 50000,
+        "checkout_link": "https://pay.example/abc",
+        "line_items": [
+            {
+                "product_id": "prod_1",
+                "quantity": 1,
+                "is_add_on": False,
+                "linked_order_line_item_id": None,
+            }
+        ],
+    }
+    mocked.add(responses.POST, f"{BASE_URL}/orders/checkout", json=payload)
+    order = client.orders.create_checkout(
+        CheckoutRequest(
+            profile_id="prof_1",
+            line_items=[CheckoutLineItem(product_id="prod_1", quantity=1)],
+        )
+    )
+    assert isinstance(order, Order)
+    assert order.id == "ord_2"
+    assert order.checkout_link == "https://pay.example/abc"
+    assert len(order.line_items) == 1
+    assert order.line_items[0].id is None
+    assert order.line_items[0].product_id == "prod_1"
+
+
+def test_get_order_parses_line_item_includes(
+    mocked: responses.RequestsMock, client: PresscartClient
+) -> None:
+    """``GET /orders/{order_id}`` returns ``includes`` (channel/placement)
+    on each line item, plus top-level ``name`` and ``email`` (which the
+    list endpoint nests under ``team`` instead). All must parse.
+    """
+    payload = {
+        "id": "ord_3",
+        "profile_id": "prof_1",
+        "status": "PAID",
+        "name": "Acme Corp",
+        "email": "team@example.com",
+        "line_items": [
+            {
+                "id": "li_1",
+                "order_id": "ord_3",
+                "product_id": "prod_1",
+                "quantity": 1,
+                "price": 1500,
+                "is_add_on": False,
+                "includes": [
+                    {"channel_type": "NEWSLETTER", "placement_type": "MENTION"}
+                ],
+            }
+        ],
+    }
+    mocked.add(responses.GET, f"{BASE_URL}/orders/ord_3", json=payload)
+    order = client.orders.get("ord_3")
+    assert isinstance(order, Order)
+    assert order.name == "Acme Corp"
+    assert order.email == "team@example.com"
+    assert order.team is None
+    assert order.line_items[0].includes is not None
+    assert len(order.line_items[0].includes) == 1
+    assert order.line_items[0].includes[0].channel_type == "NEWSLETTER"
+    assert order.line_items[0].includes[0].placement_type == "MENTION"

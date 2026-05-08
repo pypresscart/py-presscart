@@ -36,7 +36,7 @@ eyeball the live responses as each test progresses.
 | `test_orders_live.py` | read-only orders + order items | No `create_checkout`; that has billing side effects |
 | `test_profiles_live.py` | all of `client.profiles.*` | team + profile-scoped reads |
 | `test_campaigns_live.py` | read-only campaigns | No `create` / `update` / `assign_order_items` |
-| `test_articles_live.py` | `GET /articles/{id}` | Expected to raise `PermissionError`; pinned to [issue #8](https://github.com/pypresscart/py-presscart/issues/8). When the server fixes the 403, this test will fail — that's your signal to promote it. |
+| `test_articles_live.py` | `GET /articles/{id}` | Read-only. Mutating endpoints are covered by mocked unit tests because they'd advance workflow state on the target team. |
 | `test_files_live.py` | full round-trip | Creates a folder, uploads a tiny embedded JPEG, downloads it, verifies SHA-256, moves, deletes — all self-cleaning. |
 | `test_folders_live.py` | full round-trip | Creates two folders, renames, deletes. Self-cleaning. |
 

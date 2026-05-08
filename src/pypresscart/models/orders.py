@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from pypresscart.models._common import PresscartModel
+from pypresscart.models._common import IncludeItem, PresscartModel
 
 
 class CheckoutLineItem(PresscartModel):
@@ -35,9 +35,17 @@ class OutletRef(PresscartModel):
 
 
 class LineItem(PresscartModel):
-    """A line item on a returned order."""
+    """A line item on a returned order.
 
-    id: str
+    The Presscart API does not populate ``id`` on the line items
+    returned by ``POST /orders/checkout`` (the order has been created
+    but the line items haven't been persisted as ``OrderItem`` records
+    yet — those are surfaced by ``GET /order-items`` after payment).
+    Both ``id`` and ``order_id`` are therefore optional so unpaid
+    checkout responses parse cleanly.
+    """
+
+    id: str | None = None
     order_id: str | None = None
     product_id: str
     quantity: int
@@ -49,6 +57,7 @@ class LineItem(PresscartModel):
     type_id: str | None = None
     product_type_prefix: str | None = None
     outlet: OutletRef | None = None
+    includes: list[IncludeItem] | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
     deleted_at: datetime | None = None
@@ -60,7 +69,14 @@ class TeamRef(PresscartModel):
 
 
 class Order(PresscartModel):
-    """Order returned by ``GET /orders`` / ``/orders/{id}`` and ``POST /orders/checkout``."""
+    """Order returned by ``GET /orders`` / ``/orders/{id}`` and ``POST /orders/checkout``.
+
+    Team info is encoded differently per endpoint: ``GET /orders`` (list)
+    returns a nested ``team: { name, contact_email }`` block, while
+    ``GET /orders/{id}`` flattens it to top-level ``name`` and ``email``.
+    Both shapes are modeled; whichever the endpoint emits will be
+    populated and the other will be ``None``.
+    """
 
     id: str
     profile_id: str | None = None
@@ -91,6 +107,8 @@ class Order(PresscartModel):
     updated_at: datetime | None = None
     deleted_at: datetime | None = None
     team: TeamRef | None = None
+    name: str | None = None
+    email: str | None = None
     checkout_link: str | None = None
     line_items: list[LineItem] = []
 

@@ -172,3 +172,15 @@ def test_article_update(mocked: responses.RequestsMock, client: PresscartClient)
     )
     result = client.articles.update("art_1", {"name": "New"})
     assert isinstance(result, Article)
+
+
+def test_article_approve_draft(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.PATCH,
+        f"{BASE_URL}/articles/art_1/approve-draft",
+        json={"id": "art_1", "name": "approved"},
+    )
+    result = client.articles.approve_draft(
+        "art_1", {"draft_google_doc_url": "https://docs.example/abc"}
+    )
+    assert isinstance(result, Article)
