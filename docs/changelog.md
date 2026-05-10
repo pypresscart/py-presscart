@@ -4,6 +4,15 @@ All notable changes to `pypresscart` are recorded here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.5] — 2026-05-10
+
+### Added
+- `client.orders.get(order_id, include_outlets_data=True)` — new keyword-only
+  parameter that requests a fully-populated `outlet` block (`id`, `name`,
+  `logo`, `website_url`) on each line item instead of the lean shape.
+  Defaults to `None`, in which case the parameter is omitted from the URL
+  and existing call sites are byte-for-byte unchanged on the wire.
+
 ## [0.1.4] — 2026-05-08
 
 ### Added
@@ -69,7 +78,8 @@ Initial public release.
 - Runtime: `pydantic>=2.7,<3`, `requests>=2.31,<3`.
 - Python 3.10+.
 
-[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.5
 [0.1.4]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.4
 [0.1.3]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.3
 [0.1.2]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.2
