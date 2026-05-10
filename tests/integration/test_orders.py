@@ -46,6 +46,28 @@ def test_get_order_detail(live_client: PresscartClient) -> None:
         assert detail.date_paid is not None
 
 
+def _find_order_with_line_items(live_client: PresscartClient) -> str | None:
+    page = live_client.orders.list(limit=10)
+    for o in page.records:
+        if o.line_items:
+            return o.id
+    return None
+
+
+def test_get_order_with_include_outlets_data(live_client: PresscartClient) -> None:
+    order_id = _find_order_with_line_items(live_client)
+    if order_id is None:
+        pytest.skip("no orders with line items on this team")
+    detail = live_client.orders.get(order_id, include_outlets_data=True)
+    assert isinstance(detail, Order)
+    populated = [li for li in detail.line_items if li.outlet is not None and li.outlet.id]
+    assert populated, "expected at least one line item with a populated outlet.id"
+    sample = populated[0].outlet
+    assert sample is not None
+    assert sample.id
+    assert sample.name
+
+
 def test_list_order_items(live_client: PresscartClient) -> None:
     page = live_client.order_items.list(limit=5)
     assert isinstance(page, Paginated)
