@@ -37,10 +37,12 @@ class OrdersResource(ResourceBase):
         self,
         order_id: str,
         *,
+        include_outlets_data: bool | None = None,
         as_json: bool | None = None,
     ) -> Order | dict[str, Any]:
         """Get a single order by id. Required scope: ``orders.read``."""
-        payload = self._client._request("GET", f"/orders/{order_id}")
+        params = {"include_outlets_data": include_outlets_data}
+        payload = self._client._request("GET", f"/orders/{order_id}", params=params)
         return self._parse(payload, Order, as_json)
 
     def create_checkout(
