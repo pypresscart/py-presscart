@@ -70,6 +70,29 @@ Also exercise whatever behavior the release is fixing/adding — instantiate
 the affected model, call the affected resource method with a mocked or real
 response, etc. A passing import is necessary but not sufficient.
 
+### 4.1. Run live integration tests (required for resource/model changes)
+
+If this release modifies anything under `src/pypresscart/resources/` or
+`src/pypresscart/models/`, run the live integration suite against a real
+`full_access` token and confirm green before continuing:
+
+```bash
+uv run pytest -m integration -v
+```
+
+CI does **not** run integration tests — they auto-skip without
+`PRESSCART_API_TOKEN` (set in `tests/integration/.env.local`). The
+TestPyPI smoke in step 4 only proves the wheel installs and imports;
+it does not exercise the live API. This step is the only check that
+catches contract drift between the SDK and the real Presscart server.
+
+If the modified resource surface has no matching live test, add one
+(see `tests/integration/test_<resource>.py` for the pattern) and land
+that PR before publishing.
+
+Pure-docs, pure-tooling, or pure-test releases (no changes under
+`src/pypresscart/resources/` or `src/pypresscart/models/`) are exempt.
+
 ### 5. Publish to PyPI
 
 ```bash
