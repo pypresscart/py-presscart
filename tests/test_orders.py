@@ -141,3 +141,48 @@ def test_get_order_parses_line_item_includes(
     assert len(order.line_items[0].includes) == 1
     assert order.line_items[0].includes[0].channel_type == "NEWSLETTER"
     assert order.line_items[0].includes[0].placement_type == "MENTION"
+
+
+def test_get_order_with_include_outlets_data(
+    mocked: responses.RequestsMock, client: PresscartClient
+) -> None:
+    payload = {
+        "id": "ord_4",
+        "profile_id": "prof_1",
+        "status": "CREATED",
+        "line_items": [
+            {
+                "id": "li_1",
+                "order_id": "ord_4",
+                "product_id": "prod_1",
+                "quantity": 1,
+                "price": 125,
+                "is_add_on": False,
+                "name": "VC Magazine",
+                "outlet": {
+                    "id": "out_1",
+                    "name": "VC Magazine",
+                    "logo": "https://cdn.example/logo.png",
+                    "website_url": "https://vcmagazine.com/",
+                },
+                "includes": [{"channel_type": "WEBSITE", "placement_type": "FULL_FEATURE"}],
+            }
+        ],
+    }
+    mocked.add(responses.GET, f"{BASE_URL}/orders/ord_4", json=payload)
+    order = client.orders.get("ord_4", include_outlets_data=True)
+    assert isinstance(order, Order)
+    assert mocked.calls[0].request.url.endswith("?include_outlets_data=true")
+    outlet = order.line_items[0].outlet
+    assert outlet is not None
+    assert outlet.id == "out_1"
+    assert outlet.name == "VC Magazine"
+    assert outlet.website_url == "https://vcmagazine.com/"
+
+
+def test_get_order_omits_include_outlets_data_when_unset(
+    mocked: responses.RequestsMock, client: PresscartClient
+) -> None:
+    mocked.add(responses.GET, f"{BASE_URL}/orders/ord_5", json=_order_payload())
+    client.orders.get("ord_5")
+    assert "include_outlets_data" not in mocked.calls[0].request.url
