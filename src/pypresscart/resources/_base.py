@@ -26,11 +26,25 @@ class ResourceBase:
         self._client = client
 
     @staticmethod
-    def _serialize(body: BaseModel | dict[str, Any] | None) -> dict[str, Any] | None:
+    def _serialize(
+        body: BaseModel | dict[str, Any] | None,
+        *,
+        exclude_none: bool = True,
+    ) -> dict[str, Any] | None:
+        """Serialize a request body to a JSON-compatible dict.
+
+        ``exclude_none`` controls only the Pydantic path. Most endpoints
+        treat an omitted key the same as ``null``, so dropping ``None``
+        fields (the default) keeps payloads lean. Pass ``exclude_none=False``
+        for endpoints whose schema requires a key to be *present* even when
+        its value is ``null`` (e.g. ``POST /campaigns``). Plain ``dict``
+        bodies are always passed through untouched — they are the escape
+        hatch for callers who need exact control over the wire payload.
+        """
         if body is None:
             return None
         if isinstance(body, BaseModel):
-            return body.model_dump(mode="json", exclude_none=True)
+            return body.model_dump(mode="json", exclude_none=exclude_none)
         return dict(body)
 
     def _parse(

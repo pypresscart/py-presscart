@@ -59,8 +59,16 @@ class CampaignsResource(ResourceBase):
         *,
         as_json: bool | None = None,
     ) -> Campaign | dict[str, Any]:
-        """Create a campaign. Required scope: ``campaigns.create``."""
-        payload = self._client._request("POST", "/campaigns", json=self._serialize(body))
+        """Create a campaign. Required scope: ``campaigns.create``.
+
+        ``POST /campaigns`` requires the nullable fields (``description``,
+        ``keywords``, ``target_audience``, ``tone``, ``writing_samples``,
+        ``file_id``) to be *present* in the payload even when ``null``, so
+        the body is serialized with ``exclude_none=False``.
+        """
+        payload = self._client._request(
+            "POST", "/campaigns", json=self._serialize(body, exclude_none=False)
+        )
         return self._parse(payload, Campaign, as_json)
 
     def update(
