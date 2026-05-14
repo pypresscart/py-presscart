@@ -30,8 +30,13 @@ without forking the API.
 ## How to apply
 
 - Request serialization helper lives on `ResourceBase`:
-  `self._serialize(obj)` — returns `obj.model_dump(exclude_none=True)` for
-  Pydantic models and `obj` for dicts.
+  `self._serialize(obj)` — returns `obj.model_dump(mode="json",
+  exclude_none=True)` for Pydantic models and `dict(obj)` for dicts.
+  - Pass `self._serialize(obj, exclude_none=False)` for endpoints whose
+    schema requires a key to be *present* even when its value is `null`
+    (e.g. `POST /campaigns`). The flag affects only the Pydantic path;
+    `dict` bodies are always passed through untouched, which is the
+    escape hatch for callers who need exact control over the payload.
 - Response parsing helper lives on `ResourceBase`:
   `self._parse(payload, model_cls, as_json)` — returns `payload` (dict) if
   the effective mode is JSON, else `model_cls.model_validate(payload)`.

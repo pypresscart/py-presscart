@@ -93,7 +93,7 @@ def create(
 | `writing_samples` | `str \| None` | Required — send `None` if N/A |
 | `file_id` | `str \| None` | Required — send `None` if N/A |
 
-> Unusual: Presscart's schema expects all nine keys to be *present* in the payload, but most may be `null`. `pypresscart`'s `CampaignCreateRequest` uses `exclude_none=True` by default — **pass a dict to preserve explicit nulls** (`create({"name": ..., "keywords": None, ...})`).
+> Unusual: Presscart's schema expects all nine keys to be *present* in the payload, but most may be `null`. `client.campaigns.create()` handles this for you — the `CampaignCreateRequest` body is serialized with `exclude_none=False`, so `None`-valued fields are sent as explicit `null`s rather than dropped. Passing a plain `dict` works too; dict bodies are sent through untouched.
 
 **Example**
 

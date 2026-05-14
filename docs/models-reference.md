@@ -328,6 +328,8 @@ order = Order.model_validate(raw_dict)
 body.model_dump(mode="json", exclude_none=True)
 ```
 
+This is how `pypresscart` serializes request bodies internally. `exclude_none=True` keeps payloads lean by dropping `None`-valued fields, which is correct for the vast majority of endpoints (an omitted key behaves the same as `null`). A few endpoints — notably `POST /campaigns` — require a key to be *present* even when its value is `null`; for those the library serializes with `exclude_none=False`. You don't need to think about this when calling resource methods, but it matters if you're dumping a model by hand to send it yourself.
+
 ### Forward compatibility
 
 If Presscart adds a new field to a response, `pypresscart` won't raise a validation error — the extra data is preserved on the parsed model (accessible as `model.model_extra`) but not typed. Upgrade the library to pick up the typed attribute once it's available.
