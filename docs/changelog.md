@@ -4,6 +4,20 @@ All notable changes to `pypresscart` are recorded here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.6] — 2026-05-14
+
+### Fixed
+- `client.campaigns.create()` now sends the nullable body fields
+  (`description`, `keywords`, `target_audience`, `tone`, `writing_samples`,
+  `file_id`) as explicit `null`s instead of dropping them. `POST /campaigns`
+  requires these keys to be *present* in the payload even when null;
+  `_serialize` previously used `exclude_none=True` unconditionally, so a
+  `CampaignCreateRequest` built with the nullable fields left at their
+  `None` defaults produced a payload the API rejected. `_serialize` now
+  takes an `exclude_none` keyword (default `True`, unchanged for every
+  other endpoint); `campaigns.create` opts into `exclude_none=False`.
+  Plain `dict` bodies are still passed through untouched.
+
 ## [0.1.5] — 2026-05-10
 
 ### Added
@@ -78,7 +92,8 @@ Initial public release.
 - Runtime: `pydantic>=2.7,<3`, `requests>=2.31,<3`.
 - Python 3.10+.
 
-[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.6...HEAD
+[0.1.6]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.6
 [0.1.5]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.5
 [0.1.4]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.4
 [0.1.3]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.3
