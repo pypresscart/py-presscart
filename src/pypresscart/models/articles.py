@@ -81,6 +81,62 @@ class ApproveDraftRequest(PresscartModel):
     draft_google_doc_url: str | None = None
 
 
+# --- Comments -----------------------------------------------------------------
+
+
+class CommentAuthor(PresscartModel):
+    """Author block on a comment response."""
+
+    name: str | None = None
+    email: str | None = None
+
+
+class Comment(PresscartModel):
+    """A comment on an article. Root comments carry one level of ``replies``."""
+
+    id: str
+    content: str | None = None
+    author: CommentAuthor | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    parent_comment_id: str | None = None
+    replies: list[Comment] = []  # one level deep; reply objects omit this key
+
+
+class CommentList(PresscartModel):
+    """Response from ``GET /articles/{id}/comments`` — records only, no pagination."""
+
+    records: list[Comment] = []
+
+
+class CommentAuthorInput(PresscartModel):
+    """Author block for ``POST /articles/{id}/comments``."""
+
+    name: str  # required, 1-200 characters
+    email: str | None = None
+    external_id: str | None = None  # your system's id for the author; audit only
+
+
+class CommentCreateRequest(PresscartModel):
+    """Body for ``POST /articles/{id}/comments``."""
+
+    content: str  # required, 1-10,000 characters
+    author: CommentAuthorInput
+    parent_comment_id: str | None = None  # omit for root comments
+
+
+class CommentUpdateRequest(PresscartModel):
+    """Body for ``PUT /articles/{id}/comments/{ref}``."""
+
+    content: str  # required, 1-10,000 characters
+
+
+class CommentArchiveResponse(PresscartModel):
+    """Empty body of ``DELETE /articles/{id}/comments/{ref}`` (204 No Content)."""
+
+    # Intentionally no fields — the API returns no body; validates ``{}`` cleanly.
+
+
 __all__ = [
     "ApproveDraftRequest",
     "Article",
@@ -89,4 +145,11 @@ __all__ = [
     "ArticleUpdateRequest",
     "ArticleWriter",
     "CampaignArticleRow",
+    "Comment",
+    "CommentArchiveResponse",
+    "CommentAuthor",
+    "CommentAuthorInput",
+    "CommentCreateRequest",
+    "CommentList",
+    "CommentUpdateRequest",
 ]

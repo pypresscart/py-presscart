@@ -6,6 +6,10 @@ import responses
 
 from pypresscart import (
     Article,
+    Comment,
+    CommentArchiveResponse,
+    CommentCreateRequest,
+    CommentList,
     OrderItem,
     PresscartClient,
     Product,
@@ -184,3 +188,127 @@ def test_article_approve_draft(mocked: responses.RequestsMock, client: Presscart
         "art_1", {"draft_google_doc_url": "https://docs.example/abc"}
     )
     assert isinstance(result, Article)
+
+
+# --- Comments -----------------------------------------------------------------
+
+_COMMENT = {
+    "id": "K7M2Q9XA",
+    "content": "Can you clarify the requested change?",
+    "author": {"name": "Jane Smith", "email": "jane@example.com"},
+    "created_at": "2026-03-20T10:00:00.000Z",
+    "updated_at": "2026-03-20T10:00:00.000Z",
+    "parent_comment_id": None,
+    "replies": [
+        {
+            "id": "M4R8T1QZ",
+            "content": "Yes, we updated the introduction.",
+            "author": {"name": "Pat Lee", "email": None},
+            "created_at": "2026-03-20T10:05:00.000Z",
+            "updated_at": "2026-03-20T10:05:00.000Z",
+            "parent_comment_id": "K7M2Q9XA",
+        }
+    ],
+}
+
+
+def test_list_comments(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/articles/art_1/comments",
+        json={"records": [_COMMENT]},
+    )
+    result = client.articles.list_comments("art_1")
+    assert isinstance(result, CommentList)
+    assert isinstance(result.records[0], Comment)
+    assert isinstance(result.records[0].replies[0], Comment)  # one level deep
+    assert result.records[0].replies[0].parent_comment_id == "K7M2Q9XA"
+
+
+def test_list_comments_json(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.GET,
+        f"{BASE_URL}/articles/art_1/comments",
+        json={"records": [_COMMENT]},
+    )
+    result = client.articles.list_comments("art_1", as_json=True)
+    assert isinstance(result, dict)
+    assert result["records"][0]["replies"][0]["id"] == "M4R8T1QZ"
+
+
+def test_create_comment(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.POST,
+        f"{BASE_URL}/articles/art_1/comments",
+        json={**_COMMENT, "replies": []},
+        status=201,
+    )
+    body = CommentCreateRequest(
+        content="Can you clarify the requested change?",
+        author={"name": "Jane Smith", "email": "jane@example.com", "external_id": "u-123"},  # type: ignore[arg-type]
+    )
+    result = client.articles.create_comment("art_1", body)
+    assert isinstance(result, Comment)
+    assert result.id == "K7M2Q9XA"
+
+
+def test_create_comment_json(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.POST,
+        f"{BASE_URL}/articles/art_1/comments",
+        json={**_COMMENT, "replies": []},
+        status=201,
+    )
+    result = client.articles.create_comment(
+        "art_1",
+        {"content": "Hi", "author": {"name": "Jane Smith"}},
+        as_json=True,
+    )
+    assert isinstance(result, dict)
+    assert result["id"] == "K7M2Q9XA"
+
+
+def test_update_comment(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.PUT,
+        f"{BASE_URL}/articles/art_1/comments/K7M2Q9XA",
+        json={**_COMMENT, "content": "Updated comment text."},
+    )
+    result = client.articles.update_comment(
+        "art_1", "K7M2Q9XA", {"content": "Updated comment text."}
+    )
+    assert isinstance(result, Comment)
+    assert result.content == "Updated comment text."
+
+
+def test_update_comment_json(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.PUT,
+        f"{BASE_URL}/articles/art_1/comments/K7M2Q9XA",
+        json={**_COMMENT, "content": "Updated comment text."},
+    )
+    result = client.articles.update_comment(
+        "art_1", "K7M2Q9XA", {"content": "Updated comment text."}, as_json=True
+    )
+    assert isinstance(result, dict)
+    assert result["content"] == "Updated comment text."
+
+
+def test_archive_comment(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.DELETE,
+        f"{BASE_URL}/articles/art_1/comments/K7M2Q9XA",
+        status=204,
+    )
+    result = client.articles.archive_comment("art_1", "K7M2Q9XA")
+    assert isinstance(result, CommentArchiveResponse)
+
+
+def test_archive_comment_json(mocked: responses.RequestsMock, client: PresscartClient) -> None:
+    mocked.add(
+        responses.DELETE,
+        f"{BASE_URL}/articles/art_1/comments/K7M2Q9XA",
+        status=204,
+    )
+    result = client.articles.archive_comment("art_1", "K7M2Q9XA", as_json=True)
+    assert result == {}

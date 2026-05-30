@@ -10,6 +10,11 @@ from pypresscart.models.articles import (
     ApproveDraftRequest,
     Article,
     ArticleUpdateRequest,
+    Comment,
+    CommentArchiveResponse,
+    CommentCreateRequest,
+    CommentList,
+    CommentUpdateRequest,
 )
 from pypresscart.resources._base import ResourceBase
 
@@ -64,3 +69,61 @@ class ArticlesResource(ResourceBase):
             json=self._serialize(body),
         )
         return self._parse(payload, Article, as_json)
+
+    # ---- comments --------------------------------------------------------
+
+    def list_comments(
+        self,
+        article_id: str,
+        *,
+        as_json: bool | None = None,
+    ) -> CommentList | dict[str, Any]:
+        """List an article's comments, grouped by root comment with one level
+        of replies. Required scopes: ``articles.read``, ``articles.lists``."""
+        payload = self._client._request("GET", f"/articles/{article_id}/comments")
+        return self._parse(payload, CommentList, as_json)
+
+    def create_comment(
+        self,
+        article_id: str,
+        body: CommentCreateRequest | BaseModel | dict[str, Any],
+        *,
+        as_json: bool | None = None,
+    ) -> Comment | dict[str, Any]:
+        """Create a comment on an article. Pass ``parent_comment_id`` to post a
+        reply. Required scope: ``articles.create``."""
+        payload = self._client._request(
+            "POST", f"/articles/{article_id}/comments", json=self._serialize(body)
+        )
+        return self._parse(payload, Comment, as_json)
+
+    def update_comment(
+        self,
+        article_id: str,
+        comment_reference: str,
+        body: CommentUpdateRequest | BaseModel | dict[str, Any],
+        *,
+        as_json: bool | None = None,
+    ) -> Comment | dict[str, Any]:
+        """Replace the content of a comment your token created. Required scope:
+        ``articles.update``."""
+        payload = self._client._request(
+            "PUT",
+            f"/articles/{article_id}/comments/{comment_reference}",
+            json=self._serialize(body),
+        )
+        return self._parse(payload, Comment, as_json)
+
+    def archive_comment(
+        self,
+        article_id: str,
+        comment_reference: str,
+        *,
+        as_json: bool | None = None,
+    ) -> CommentArchiveResponse | dict[str, Any]:
+        """Soft-delete (archive) a comment your token created. Required scope:
+        ``articles.delete``."""
+        payload = self._client._request(
+            "DELETE", f"/articles/{article_id}/comments/{comment_reference}"
+        )
+        return self._parse(payload, CommentArchiveResponse, as_json)
