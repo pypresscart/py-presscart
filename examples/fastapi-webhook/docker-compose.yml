@@ -1,0 +1,11 @@
+services:
+  webhook:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Required: signing secret from the Presscart webhook detail page.
+      PRESSCART_WEBHOOK_SECRET: ${PRESSCART_WEBHOOK_SECRET:?set your signing secret}
+      # Optional: enables the article-enrichment path in app.py.
+      PRESSCART_API_TOKEN: ${PRESSCART_API_TOKEN:-}
+    restart: unless-stopped

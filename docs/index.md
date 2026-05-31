@@ -28,6 +28,7 @@ dual-mode
 error-handling
 pagination
 retry-and-timeouts
+webhooks
 ```
 
 ```{toctree}
