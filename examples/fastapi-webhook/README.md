@@ -3,12 +3,14 @@
 A complete, runnable endpoint for [Presscart
 webhooks](https://docs.presscart.com/getting-started/webhooks). It:
 
-- **verifies** the `x-hookdeck-signature` HMAC-SHA256 (base64) signature over the
+- **verifies** the `x-outpost-signature` HMAC-SHA256 (hex) signature over the
   raw body, timing-safe, **before** parsing JSON;
 - **acknowledges fast** with `2xx` and processes in a background task;
-- **deduplicates** redeliveries on the envelope `id` (deliveries are
-  at-least-once);
-- **routes** by `topic` (`article.status_changed`, `comment.*`).
+- **deduplicates** redeliveries on the `x-outpost-event-id` header (deliveries
+  are at-least-once);
+- **routes** by the `x-outpost-topic` header (`article.status_changed`,
+  `comment.*`). The event envelope is in `x-outpost-*` headers; the body is the
+  event data.
 
 See the SDK docs page [Webhooks](https://pypresscart.github.io/py-presscart/webhooks.html)
 for the concepts and equivalent plain-Python / Lambda / GCP snippets.
@@ -55,29 +57,33 @@ PRESSCART_WEBHOOK_SECRET=whsec_... \
 
 ## Test locally (without Presscart)
 
-Sign a sample payload with the same secret and POST it. Use `--data-binary` so
-curl sends the **exact bytes** the signature was computed over.
+Sign a sample body with the same secret and POST it, putting the envelope in
+headers. Use `--data-binary` so curl sends the **exact bytes** the signature
+was computed over.
 
 ```bash
 export PRESSCART_WEBHOOK_SECRET=whsec_test
 
+# The body is the event data itself (here, an article.status_changed payload).
 cat > /tmp/event.json <<'JSON'
-{"id":"evt_1","topic":"article.status_changed","time":"2026-03-20T10:00:00.000Z","metadata":{"source":"presscart"},"data":{"article_id":"a-1","status":{"prefix":"published"}}}
+{"article_id":"a-1","status":{"prefix":"published"}}
 JSON
 
 SIG=$(python - "$PRESSCART_WEBHOOK_SECRET" /tmp/event.json <<'PY'
-import base64, hashlib, hmac, sys
+import hashlib, hmac, sys
 secret, path = sys.argv[1], sys.argv[2]
 body = open(path, "rb").read()
-print(base64.b64encode(hmac.new(secret.encode(), body, hashlib.sha256).digest()).decode())
+print("v0=" + hmac.new(secret.encode(), body, hashlib.sha256).hexdigest())
 PY
 )
 
 curl -sS -X POST http://localhost:8000/webhooks/presscart \
   -H "content-type: application/json" \
-  -H "x-hookdeck-signature: $SIG" \
+  -H "x-outpost-signature: $SIG" \
+  -H "x-outpost-topic: article.status_changed" \
+  -H "x-outpost-event-id: evt_local_1" \
   --data-binary @/tmp/event.json
-# -> {"received": true}-equivalent 200; a wrong/absent signature returns 401.
+# -> 200 on success; a wrong/absent signature returns 401.
 ```
 
 ## Point Presscart at it
