@@ -238,6 +238,66 @@ class ApproveDraftRequest:
 ### `ArticleWriter`, `ArticleOrderItem`, `ArticleStatusRef`
 Embedded references.
 
+### `Comment`
+A comment on an article, returned by `client.articles.list_comments()`, `create_comment()`, and `update_comment()`. Root comments carry up to one level of `replies`.
+
+```python
+class Comment:
+    id: str
+    content: str | None
+    author: CommentAuthor | None
+    created_at: datetime | None
+    updated_at: datetime | None
+    parent_comment_id: str | None
+    replies: list[Comment]    # one level deep; empty on reply objects
+```
+
+### `CommentList`
+Response from `client.articles.list_comments()` — `records` only, no pagination envelope.
+
+```python
+class CommentList:
+    records: list[Comment]
+```
+
+### `CommentCreateRequest`
+Body for `client.articles.create_comment()`.
+
+```python
+class CommentCreateRequest:
+    content: str                     # 1–10,000 chars
+    author: CommentAuthorInput
+    parent_comment_id: str | None    # omit for root comments
+```
+
+### `CommentAuthorInput`
+Author block accepted by `create_comment()`.
+
+```python
+class CommentAuthorInput:
+    name: str                        # 1–200 chars
+    email: str | None
+    external_id: str | None          # your id for the author; stored for audit
+```
+
+### `CommentUpdateRequest`
+```python
+class CommentUpdateRequest:
+    content: str    # 1–10,000 chars
+```
+
+### `CommentAuthor`
+Author block on a comment response.
+
+```python
+class CommentAuthor:
+    name: str | None
+    email: str | None
+```
+
+### `CommentArchiveResponse`
+Empty marker returned by `client.articles.archive_comment()`. The archive endpoint responds `204 No Content`, so this model has no fields (`{}` in JSON mode).
+
 ## Files
 
 ### `File`

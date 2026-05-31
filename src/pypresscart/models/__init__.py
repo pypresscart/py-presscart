@@ -21,6 +21,13 @@ from pypresscart.models.articles import (
     ArticleUpdateRequest,
     ArticleWriter,
     CampaignArticleRow,
+    Comment,
+    CommentArchiveResponse,
+    CommentAuthor,
+    CommentAuthorInput,
+    CommentCreateRequest,
+    CommentList,
+    CommentUpdateRequest,
 )
 from pypresscart.models.auth import TokenInfo
 from pypresscart.models.campaigns import (
@@ -103,6 +110,13 @@ __all__ = [
     "CheckoutLineItem",
     "CheckoutRequest",
     "CitiesResponse",
+    "Comment",
+    "CommentArchiveResponse",
+    "CommentAuthor",
+    "CommentAuthorInput",
+    "CommentCreateRequest",
+    "CommentList",
+    "CommentUpdateRequest",
     "CountriesResponse",
     "DeleteFileResponse",
     "DeleteFolderResponse",

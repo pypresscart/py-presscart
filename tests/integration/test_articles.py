@@ -32,3 +32,10 @@ def an_article_id(live_client: PresscartClient) -> str:
 def test_get_article(live_client: PresscartClient, an_article_id: str) -> None:
     article = live_client.articles.get(an_article_id)
     assert article.id == an_article_id
+
+
+def test_list_comments(live_client: PresscartClient, an_article_id: str) -> None:
+    """Read-only comment listing. Mutating comment endpoints (create/update/
+    archive) advance team state and stay mocked-only, like update/approve_*."""
+    comments = live_client.articles.list_comments(an_article_id)
+    assert hasattr(comments, "records")

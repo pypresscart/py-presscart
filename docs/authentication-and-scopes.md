@@ -55,6 +55,11 @@ Scopes gate endpoint access. If a call returns HTTP 403, the token is valid but 
 | `campaigns.read` | `GET /campaigns/{id}`, `GET /campaigns/{id}/articles`, `GET /campaigns/{id}/articles/status-count` |
 | `campaigns.create` | `POST /campaigns` |
 | `campaigns.update` | `PUT /campaigns/{id}`, `POST /campaigns/{id}/order-items`, `POST /questionnaires/{id}/link` |
+| `articles.read` | `GET /articles/{id}/comments` (with `articles.lists`) |
+| `articles.lists` | `GET /articles/{id}/comments` (with `articles.read`) |
+| `articles.create` | `POST /articles/{id}/comments` |
+| `articles.update` | `PUT /articles/{id}/comments/{comment_reference}` |
+| `articles.delete` | `DELETE /articles/{id}/comments/{comment_reference}` |
 | `files.lists` | `GET /files` |
 | `files.read` | `GET /files/{id}`, `GET /files/{id}/download` |
 | `files.create` | `POST /files/upload` |
