@@ -4,6 +4,8 @@ All notable changes to `pypresscart` are recorded here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.7] — 2026-05-30
+
 ### Added
 - `client.articles.list_comments()`, `create_comment()`, `update_comment()`,
   and `archive_comment()` — full coverage of the article **Comments** API
@@ -105,7 +107,8 @@ Initial public release.
 - Runtime: `pydantic>=2.7,<3`, `requests>=2.31,<3`.
 - Python 3.10+.
 
-[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.7
 [0.1.6]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.6
 [0.1.5]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.5
 [0.1.4]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.4
