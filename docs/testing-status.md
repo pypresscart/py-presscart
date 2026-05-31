@@ -36,6 +36,7 @@ Every GET below was hit with a `full_access` token, the response was parsed into
 | Campaigns | `list_articles` | `GET /campaigns/{campaign_id}/articles` |
 | Campaigns | `article_status_counts` | `GET /campaigns/{campaign_id}/articles/status-count` |
 | Articles | `get` | `GET /articles/{article_id}` |
+| Articles | `list_comments` | `GET /articles/{article_id}/comments` |
 
 ## Files + Folders — full write round-trip
 
@@ -86,6 +87,9 @@ Use in production with appropriate caution. Run a dry-run against a staging team
 | `update` | `PUT /articles/{article_id}` | Mutates a real article on the target team; not safe as a smoke test. |
 | `approve_brief` | `PATCH /articles/{article_id}/approve-brief` | Advances the article through the workflow and may trigger writer/notification side effects. |
 | `approve_draft` | `PATCH /articles/{article_id}/approve-draft` | Same. |
+| `create_comment` | `POST /articles/{article_id}/comments` | Writes a real comment to the target team's article. |
+| `update_comment` | `PUT /articles/{article_id}/comments/{comment_reference}` | Mutates an existing comment. |
+| `archive_comment` | `DELETE /articles/{article_id}/comments/{comment_reference}` | Soft-deletes a comment on the live team. |
 
 ## Unit-test coverage
 

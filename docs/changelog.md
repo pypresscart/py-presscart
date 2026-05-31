@@ -4,6 +4,19 @@ All notable changes to `pypresscart` are recorded here. This project follows [Se
 
 ## [Unreleased]
 
+### Added
+- `client.articles.list_comments()`, `create_comment()`, `update_comment()`,
+  and `archive_comment()` — full coverage of the article **Comments** API
+  (`GET`/`POST`/`PUT`/`DELETE
+  /articles/{article_id}/comments[/{comment_reference}]`). Comments support one
+  level of replies via `parent_comment_id`; the short reference returned as
+  `id` (not a UUID) is the handle for update/archive. New models: `Comment`,
+  `CommentList`, `CommentAuthor`, `CommentAuthorInput`, `CommentCreateRequest`,
+  `CommentUpdateRequest`, and `CommentArchiveResponse` (empty — the archive
+  endpoint responds `204 No Content`). All dual-mode. The comment endpoints use
+  the `articles.read`/`articles.lists`/`articles.create`/`articles.update`/
+  `articles.delete` scopes.
+
 ## [0.1.6] — 2026-05-14
 
 ### Fixed
