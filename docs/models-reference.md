@@ -149,6 +149,7 @@ Body for `client.orders.create_checkout()`.
 | `profile_id` | `str` |
 | `line_items` | `list[CheckoutLineItem]` |
 | `discount` | `float \| None` (default `0`) |
+| `apply_credits` | `bool \| None` (default `None` — omitted, so the API applies Team Credits; pass `False` to skip) |
 
 ### `CheckoutLineItem`
 

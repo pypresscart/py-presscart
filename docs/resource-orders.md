@@ -94,6 +94,7 @@ def create_checkout(
 | `profile_id` | `str` | ✅ | UUID of the profile placing the order |
 | `line_items` | `list[CheckoutLineItem]` | ✅ | Non-empty |
 | `discount` | `float` | ❌ | Defaults to 0 |
+| `apply_credits` | `bool \| None` | ❌ | Whether to apply available Team Credits. Omit (the default) to let the API apply them; pass `False` to skip credits |
 
 **Line item** ([`CheckoutLineItem`](models-reference.md#checkoutlineitem)):
 
@@ -163,6 +164,20 @@ order = client.orders.create_checkout(
             CheckoutLineItem(product_id="prod_main", quantity=1),
             CheckoutLineItem(product_id="prod_addon", quantity=1, is_add_on=True),
         ],
+    )
+)
+```
+
+### Place an order without spending Team Credits
+
+By default the API applies any available Team Credits. Pass `apply_credits=False` to pay in full and leave credits untouched.
+
+```python
+order = client.orders.create_checkout(
+    CheckoutRequest(
+        profile_id="prof_1",
+        line_items=[CheckoutLineItem(product_id="prod_xyz", quantity=1)],
+        apply_credits=False,
     )
 )
 ```

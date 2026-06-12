@@ -50,6 +50,22 @@ def test_create_checkout_with_pydantic_body(
     sent = json.loads(mocked.calls[0].request.body)
     assert sent["profile_id"] == "prof_1"
     assert sent["line_items"][0]["product_id"] == "prod_1"
+    # Omitted apply_credits is dropped so the server default (true) stands.
+    assert "apply_credits" not in sent
+
+
+def test_create_checkout_sends_apply_credits_false(
+    mocked: responses.RequestsMock, client: PresscartClient
+) -> None:
+    mocked.add(responses.POST, f"{BASE_URL}/orders/checkout", json=_order_payload())
+    body = CheckoutRequest(
+        profile_id="prof_1",
+        line_items=[CheckoutLineItem(product_id="prod_1", quantity=1)],
+        apply_credits=False,
+    )
+    client.orders.create_checkout(body)
+    sent = json.loads(mocked.calls[0].request.body)
+    assert sent["apply_credits"] is False
 
 
 def test_create_checkout_with_dict_body(

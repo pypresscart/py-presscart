@@ -23,6 +23,10 @@ class CheckoutRequest(PresscartModel):
     profile_id: str
     line_items: list[CheckoutLineItem]
     discount: float | None = 0
+    # Optional. When omitted the API applies available Team Credits (server
+    # default ``true``). Left as ``None`` so ``exclude_none`` drops it and the
+    # server default stands; set ``False`` explicitly to skip credits.
+    apply_credits: bool | None = None
 
 
 class OutletRef(PresscartModel):
