@@ -4,6 +4,14 @@ All notable changes to `pypresscart` are recorded here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.8] — 2026-06-12
+
+### Added
+- `CheckoutRequest.apply_credits` (`bool | None`) — new optional body field on
+  `POST /orders/checkout`. Omit it (the default `None`, dropped from the
+  payload) to let the API apply available Team Credits, or pass `False` to skip
+  credits and pay in full.
+
 ## [0.1.7] — 2026-05-30
 
 ### Added
@@ -107,7 +115,8 @@ Initial public release.
 - Runtime: `pydantic>=2.7,<3`, `requests>=2.31,<3`.
 - Python 3.10+.
 
-[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.7...HEAD
+[Unreleased]: https://github.com/pypresscart/py-presscart/compare/v0.1.8...HEAD
+[0.1.8]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.8
 [0.1.7]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.7
 [0.1.6]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.6
 [0.1.5]: https://github.com/pypresscart/py-presscart/releases/tag/v0.1.5
